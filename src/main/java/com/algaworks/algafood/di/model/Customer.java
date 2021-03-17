@@ -1,7 +1,6 @@
 package com.algaworks.algafood.di.model;
 
 public class Customer {
-
 	private String name;
 	private String email;
 	private String telephone;
