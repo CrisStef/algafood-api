@@ -6,6 +6,7 @@ import com.algaworks.algafood.domain.model.Kitchen;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
+import com.algaworks.algafood.domain.repository.KitchenRepository;
 
 public class InsertKitchenMain {
 	
@@ -13,7 +14,7 @@ public class InsertKitchenMain {
 		ApplicationContext app = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE)
 				.run(args);
-		KitchenRegister kitchenRegister = app.getBean(KitchenRegister.class);
+        KitchenRepository kitchenRepository = app.getBean(KitchenRepository.class);
 
 		Kitchen kitchen1 = new Kitchen();
 		kitchen1.setName("Brasileira");
@@ -21,7 +22,7 @@ public class InsertKitchenMain {
 		Kitchen kitchen2 = new Kitchen();
 		kitchen2.setName("Japonesa");
 		
-		kitchenRegister.save(kitchen1);
-		kitchenRegister.save(kitchen2);
+		kitchenRepository.save(kitchen1);
+		kitchenRepository.save(kitchen2);
 	}
 }
