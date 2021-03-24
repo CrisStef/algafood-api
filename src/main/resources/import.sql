@@ -7,8 +7,8 @@ insert into restaurant (name, freight_rate, kitchen_id) values ('Madero', 10.25,
 insert into payment (description) values ('Cartão de Crédito');
 insert into payment (description) values ('Cartão de Débito');
 
-insert into permission (name, description) values ('INSERT', 'Esse usuário tem permissão para fazer cadastros');
-insert into permission (name, description) values ('CHANGE', 'Esse usuário tem permissão para fazer alterações nos registros');
+insert into permission (name, description) values ('CONSULTAR_COZINHAS', 'Permite consultar cozinhas');
+insert into permission (name, description) values ('EDITAR_COZINHAS', 'Permite editar cozinhas');
 
 insert into state (name) values ('Bahia');
 insert into state (name) values ('São Paulo');
