@@ -19,5 +19,5 @@ public class StateController {
 	@GetMapping
 	public List<State> list() {
 		return stateRepository.listAll();
-	}
+	}   
 }
