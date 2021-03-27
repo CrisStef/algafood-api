@@ -3,12 +3,14 @@ package com.algaworks.algafood.api.controller;
 import java.util.List;
 
 import com.algaworks.algafood.api.model.KitchenXmlWrapper;
+import com.algaworks.algafood.domain.exception.EntityInUseException;
+import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.repository.KitchenRepository;
+import com.algaworks.algafood.domain.service.KitchenService;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/kitchens")
 public class KitchenController {
+	@Autowired
+	private KitchenService kitchenService;
 	@Autowired
 	private KitchenRepository kitchenRepository;
 
@@ -47,7 +51,7 @@ public class KitchenController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Kitchen save(@RequestBody Kitchen kitchen) {
-		return kitchenRepository.save(kitchen);
+		return kitchenService.save(kitchen);
 	}
 
 	@PutMapping("/{kitchen_id}")
@@ -61,14 +65,12 @@ public class KitchenController {
 	@DeleteMapping("/{kitchen_id}")
 	public ResponseEntity<Kitchen> remove(@PathVariable("kitchen_id") Long id) {
 		try {
-			Kitchen kitchen = kitchenRepository.findById(id);
-			if (kitchen != null) {
-				kitchenRepository.remove(kitchen);
-				return ResponseEntity.noContent().build();
-			}
-			return ResponseEntity.notFound().build();
-		} catch (DataIntegrityViolationException e) {
+			kitchenService.remove(id);
+			return ResponseEntity.noContent().build();
+		} catch (EntityInUseException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
 		}
 	}
 }
