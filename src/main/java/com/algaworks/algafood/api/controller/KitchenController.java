@@ -2,7 +2,6 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
-import com.algaworks.algafood.api.model.KitchenXmlWrapper;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
@@ -37,11 +36,6 @@ public class KitchenController {
 		return kitchenRepository.listAll();
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-	public KitchenXmlWrapper listXml() {
-		return new KitchenXmlWrapper(kitchenRepository.listAll());
-	}
-
 	@GetMapping("/{kitchen_id}")
 	public ResponseEntity<Kitchen> find(@PathVariable("kitchen_id") Long id) {
 		Kitchen kitchen = kitchenRepository.findById(id);
@@ -58,7 +52,7 @@ public class KitchenController {
 	public ResponseEntity<Kitchen> update(@PathVariable("kitchen_id") Long id, @RequestBody Kitchen kitchen) {
 		Kitchen currentKitchen = kitchenRepository.findById(id);
 		BeanUtils.copyProperties(kitchen, currentKitchen, "id");
-		kitchenRepository.save(currentKitchen);
+		kitchenService.save(currentKitchen);
 		return ResponseEntity.ok().body(currentKitchen);
 	}
 
