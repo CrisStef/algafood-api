@@ -2,10 +2,9 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
-import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
-import com.algaworks.algafood.domain.model.State;
-import com.algaworks.algafood.domain.service.StateService;
+import com.algaworks.algafood.domain.model.City;
+import com.algaworks.algafood.domain.service.CityService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,50 +19,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/states")
-public class StateController {
+@RequestMapping("/cities")
+public class CityController {
 	@Autowired
-	private StateService stateService;
+	private CityService cityService;
 
 	@GetMapping
-	public List<State> list() {
-		return stateService.list();
+	public List<City> list() {
+		return cityService.list();
 	}
 
-	@GetMapping("/{state_id}")
-	public ResponseEntity<?> findById(@PathVariable("state_id") Long id) {
+	@GetMapping("/{city_id}")
+	public ResponseEntity<?> findById(@PathVariable("city_id") Long id) {
 		try {
-			State state = stateService.findById(id);
+			City city = cityService.findById(id);
 
-			return ResponseEntity.ok().body(state);
+			return ResponseEntity.ok().body(city);
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody State state) {
-		state = stateService.create(state);
-		return ResponseEntity.status(HttpStatus.CREATED).body(state);
+	public ResponseEntity<?> create(@RequestBody City city) {
+		city = cityService.create(city);
+		return ResponseEntity.status(HttpStatus.CREATED).body(city);
 	}
 
-	@PutMapping("/{state_id}")
-	public ResponseEntity<?> update(@RequestBody State state, @PathVariable("state_id") Long id) {
+	@PutMapping("/{city_id}")
+	public ResponseEntity<?> update(@RequestBody City city, @PathVariable("city_id") Long id) {
 		try {
-			state = stateService.update(state, id);
-			return ResponseEntity.ok().body(state);
+			city = cityService.update(city, id);
+			return ResponseEntity.ok().body(city);
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (RuntimeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
-	@DeleteMapping("/{state_id}")
-	public ResponseEntity<?> remove(@PathVariable("state_id") Long id) {
+	@DeleteMapping("/{city_id}")
+	public ResponseEntity<?> remove(@PathVariable("city_id") Long id) {
 		try {
-			stateService.remove(id);
+			cityService.remove(id);
 			return ResponseEntity.noContent().build();
-		} catch (EntityInUseException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}

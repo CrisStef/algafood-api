@@ -35,7 +35,6 @@ public class StateRepositoryImpl implements StateRepository {
 	@Transactional
 	@Override
 	public void remove(State state) {
-		state = findById(state.getId());
 		manager.remove(state);
 	}
 }

@@ -44,7 +44,7 @@ public class KitchenController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen save(@RequestBody Kitchen kitchen) {
+	public Kitchen create(@RequestBody Kitchen kitchen) {
 		return kitchenService.save(kitchen);
 	}
 
