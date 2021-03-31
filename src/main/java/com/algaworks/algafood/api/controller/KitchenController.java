@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
@@ -11,7 +12,6 @@ import com.algaworks.algafood.domain.service.KitchenService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,15 +31,15 @@ public class KitchenController {
 	@Autowired
 	private KitchenRepository kitchenRepository;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public List<Kitchen> list() {
-		return kitchenRepository.listAll();
+		return kitchenRepository.findAll();
 	}
 
 	@GetMapping("/{kitchen_id}")
 	public ResponseEntity<Kitchen> find(@PathVariable("kitchen_id") Long id) {
-		Kitchen kitchen = kitchenRepository.findById(id);
-		return ResponseEntity.ok().body(kitchen);
+		Optional<Kitchen> kitchen = kitchenRepository.findById(id);
+		return ResponseEntity.ok().body(kitchen.get());
 	}
 
 	@PostMapping
@@ -50,10 +50,10 @@ public class KitchenController {
 
 	@PutMapping("/{kitchen_id}")
 	public ResponseEntity<Kitchen> update(@PathVariable("kitchen_id") Long id, @RequestBody Kitchen kitchen) {
-		Kitchen currentKitchen = kitchenRepository.findById(id);
-		BeanUtils.copyProperties(kitchen, currentKitchen, "id");
-		kitchenService.save(currentKitchen);
-		return ResponseEntity.ok().body(currentKitchen);
+		Optional<Kitchen> currentKitchen = kitchenRepository.findById(id);
+		BeanUtils.copyProperties(kitchen, currentKitchen.get(), "id");
+		kitchenService.save(currentKitchen.get());
+		return ResponseEntity.ok().body(currentKitchen.get());
 	}
 
 	@DeleteMapping("/{kitchen_id}")

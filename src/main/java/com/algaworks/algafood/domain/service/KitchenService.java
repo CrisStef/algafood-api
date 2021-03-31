@@ -21,7 +21,7 @@ public class KitchenService {
 
 	public void remove(Long id) {
 		try {
-			kitchenRepository.remove(id);
+			kitchenRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Kitchen (%d) Not found", id));
 		} catch (DataIntegrityViolationException e) {

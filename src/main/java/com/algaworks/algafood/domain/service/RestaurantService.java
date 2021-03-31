@@ -22,11 +22,7 @@ public class RestaurantService {
 
 	public Restaurant create(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
-
-		if (kitchen == null) {
-			throw new EntityNotFoundException(String.format("Kitchen not found! Id: %d", kitchenId));
-		}
+		Kitchen kitchen = kitchenRepository.findById(kitchenId).orElseThrow(() -> new RuntimeException(String.format("Kitchen not found! Id: %d", kitchenId)));
 
 		restaurant.setKitchen(kitchen);
 
@@ -44,11 +40,7 @@ public class RestaurantService {
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
 
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
-
-		if (kitchen == null) {
-			throw new RuntimeException(String.format("Kitchen not found! Id: %d", kitchenId));
-		}
+		Kitchen kitchen = kitchenRepository.findById(kitchenId).orElseThrow(() -> new RuntimeException(String.format("Kitchen not found! Id: %d", kitchenId)));
 
 		currentRestaurant.setKitchen(kitchen);
 
