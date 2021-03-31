@@ -1,12 +1,14 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.Map;
+
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.KitchenRepository;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
+import com.algaworks.algafood.domain.util.MergeMapper;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,21 +33,23 @@ public class RestaurantService {
 		return restaurantRepository.save(restaurant);
 	}
 
-	public Restaurant update(Restaurant restaurant, Long id) {
-		Long kitchenId = restaurant.getKitchen().getId();
-
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
-
+	public Restaurant update(Map<String, Object> restaurant, Long id) {
 		Restaurant currentRestaurant = restaurantRepository.findById(id);
 
 		if (currentRestaurant == null) {
 			throw new EntityNotFoundException(String.format("Restaurant not found! Id: %d", id));
 		}
+
+		MergeMapper.merge(restaurant, currentRestaurant);
+
+		Long kitchenId = currentRestaurant.getKitchen().getId();
+
+		Kitchen kitchen = kitchenRepository.findById(kitchenId);
+
 		if (kitchen == null) {
 			throw new RuntimeException(String.format("Kitchen not found! Id: %d", kitchenId));
 		}
 
-		BeanUtils.copyProperties(restaurant, currentRestaurant, "id");
 		currentRestaurant.setKitchen(kitchen);
 
 		return restaurantRepository.save(currentRestaurant);
