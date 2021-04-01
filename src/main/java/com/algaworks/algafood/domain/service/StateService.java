@@ -10,6 +10,7 @@ import com.algaworks.algafood.domain.repository.StateRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,16 +18,12 @@ public class StateService {
 	@Autowired
 	private StateRepository stateRepository;
 
-	public List<State> list() {
-		return stateRepository.listAll();
+	public List<State> listAll() {
+		return stateRepository.findAll();
 	}
 
 	public State findById(Long id) {
-		State state = stateRepository.findById(id);
-
-		if (state == null) {
-			throw new EntityNotFoundException(String.format("State not found! Id: %d", id));
-		}
+		State state = stateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("State not found! Id: %d", id)));
 
 		return state;
 	}
@@ -36,11 +33,7 @@ public class StateService {
 	}
 
 	public State update(State state, Long id) {
-		State currentState = stateRepository.findById(id);
-
-		if (currentState == null) {
-			throw new EntityNotFoundException(String.format("State not found! Id: %d", id));
-		}
+		State currentState = stateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("State not found! Id: %d", id)));
 
 		BeanUtils.copyProperties(state, currentState, "id");
 		currentState = stateRepository.save(currentState);
@@ -49,14 +42,10 @@ public class StateService {
 	}
 
 	public void remove(Long id) {
-		State state = stateRepository.findById(id);
-
-		if (state == null) {
-			throw new EntityNotFoundException(String.format("State not found! Id: %d", id));
-		}
-
 		try {
-			stateRepository.remove(state);
+			stateRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new EntityNotFoundException(String.format("State (%d) Not found", id));
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(String.format("State (%d) in use and cannot be removed", id));
 		}

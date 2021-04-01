@@ -1,6 +1,8 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
@@ -22,19 +24,29 @@ public class RestaurantService {
 
 	public Restaurant create(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenRepository.findById(kitchenId).orElseThrow(() -> new RuntimeException(String.format("Kitchen not found! Id: %d", kitchenId)));
+		Kitchen kitchen = kitchenRepository.findById(kitchenId).orElseThrow(() -> new EntityNotFoundException(String.format("Kitchen not found! Id: %d", kitchenId)));
 
 		restaurant.setKitchen(kitchen);
 
 		return restaurantRepository.save(restaurant);
 	}
 
-	public Restaurant update(Map<String, Object> restaurant, Long id) {
-		Restaurant currentRestaurant = restaurantRepository.findById(id);
+	public Restaurant findById(Long id) {
+		Optional<Restaurant> restaurant = restaurantRepository.findById(id);
 
-		if (currentRestaurant == null) {
+		if (!restaurant.isPresent()) {
 			throw new EntityNotFoundException(String.format("Restaurant not found! Id: %d", id));
 		}
+
+		return restaurant.get();
+	}
+
+	public List<Restaurant> listAll() {
+		return restaurantRepository.findAll();
+	}
+
+	public Restaurant update(Map<String, Object> restaurant, Long id) {
+		Restaurant currentRestaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Restaurant not found! Id: %d", id)));
 
 		MergeMapper.merge(restaurant, currentRestaurant);
 

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
-import com.algaworks.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/restaurants")
 public class RestaurantController {
 	@Autowired
-	private RestaurantRepository restaurantRepository;
-
-	@Autowired
 	private RestaurantService restaurantService;
 
 	@GetMapping
-	public List<Restaurant> list() {
-		return restaurantRepository.listAll();
+	public List<Restaurant> listAll() {
+		return restaurantService.listAll();
 	}
 
 	@GetMapping("/{restaurant_id}")
-	public Restaurant findById(@PathVariable("restaurant_id") Long id) {
-		return restaurantRepository.findById(id);
+	public ResponseEntity<?> findById(@PathVariable("restaurant_id") Long id) {
+		try {
+			Restaurant restaurant = restaurantService.findById(id);
+			return ResponseEntity.ok().body(restaurant);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 
 	@PostMapping

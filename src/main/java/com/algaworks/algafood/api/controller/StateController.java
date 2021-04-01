@@ -26,8 +26,8 @@ public class StateController {
 	private StateService stateService;
 
 	@GetMapping
-	public List<State> list() {
-		return stateService.list();
+	public List<State> listAll() {
+		return stateService.listAll();
 	}
 
 	@GetMapping("/{state_id}")

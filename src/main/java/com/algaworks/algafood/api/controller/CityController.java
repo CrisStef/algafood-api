@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.service.CityService;
@@ -42,8 +43,12 @@ public class CityController {
 
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody City city) {
-		city = cityService.create(city);
-		return ResponseEntity.status(HttpStatus.CREATED).body(city);
+		try {
+			city = cityService.create(city);
+			return ResponseEntity.status(HttpStatus.CREATED).body(city);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 
 	@PutMapping("/{city_id}")
@@ -65,6 +70,8 @@ public class CityController {
 			return ResponseEntity.noContent().build();
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (EntityInUseException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 }
