@@ -67,4 +67,8 @@ public class RestaurantService {
 	public List<Restaurant> findByName(String name, Long kitchenId) {
 		return restaurantRepository.findByNameAndKitchenId(name, kitchenId);
 	}
+
+	public List<Restaurant> find(String name, BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
+		return restaurantRepository.find(name, initialFraightRate, finalFraightRate);
+	}
 }
