@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -57,5 +58,13 @@ public class RestaurantService {
 		currentRestaurant.setKitchen(kitchen);
 
 		return restaurantRepository.save(currentRestaurant);
+	}
+
+	public List<Restaurant> findByFraightRate(BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
+		return restaurantRepository.findByFreightRateBetween(initialFraightRate, finalFraightRate);
+	}
+
+	public List<Restaurant> findByName(String name, Long kitchenId) {
+		return restaurantRepository.findByNameAndKitchenId(name, kitchenId);
 	}
 }

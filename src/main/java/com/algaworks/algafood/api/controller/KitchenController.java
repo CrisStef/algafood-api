@@ -68,4 +68,9 @@ public class KitchenController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
+
+	@GetMapping("/by-name")
+	public List<Kitchen> findByName(String name) {
+		return kitchenService.findByName(name);
+	}
 }

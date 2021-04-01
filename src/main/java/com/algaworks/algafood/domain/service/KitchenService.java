@@ -50,4 +50,8 @@ public class KitchenService {
 
 		return currentKitchen;
 	}
+
+	public List<Kitchen> findByName(String name) {
+		return kitchenRepository.findAllByNameContaining(name);
+	}
 }

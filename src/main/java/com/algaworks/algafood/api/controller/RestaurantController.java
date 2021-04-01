@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -59,5 +60,15 @@ public class RestaurantController {
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/find-by-fraight-rate")
+	public List<Restaurant> findByFraightRate(BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
+		return restaurantService.findByFraightRate(initialFraightRate, finalFraightRate);
+	}
+
+	@GetMapping("/find-by-name")
+	public List<Restaurant> findByName(String name, Long kitchenId) {
+		return restaurantService.findByName(name, kitchenId);
 	}
 }
