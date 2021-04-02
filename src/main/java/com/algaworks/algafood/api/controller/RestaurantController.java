@@ -81,4 +81,9 @@ public class RestaurantController {
 	public List<Restaurant> findFilter(String name) {
 		return restaurantService.findRestaurantFilter(name);
 	}
+
+	@GetMapping("/find-first")
+	public Restaurant findFirst() {
+		return restaurantService.findRestaurantFirst();
+	}
 }

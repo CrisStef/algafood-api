@@ -75,4 +75,8 @@ public class RestaurantService {
 	public List<Restaurant> findRestaurantFilter(String name) {
 		return restaurantRepository.findRestaurantFilter(name);
 	}
+
+	public Restaurant findRestaurantFirst() {
+		return restaurantRepository.findFirst().get();
+	}
 }
