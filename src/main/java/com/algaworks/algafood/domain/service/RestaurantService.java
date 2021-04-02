@@ -71,4 +71,8 @@ public class RestaurantService {
 	public List<Restaurant> find(String name, BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
 		return restaurantRepository.find(name, initialFraightRate, finalFraightRate);
 	}
+
+	public List<Restaurant> findRestaurantFilter(String name) {
+		return restaurantRepository.findRestaurantFilter(name);
+	}
 }

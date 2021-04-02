@@ -1,5 +1,8 @@
 package com.algaworks.algafood.infrastructure.repository;
 
+import static com.algaworks.algafood.infrastructure.repository.spec.RestaurantSpecs.freeFreight;
+import static com.algaworks.algafood.infrastructure.repository.spec.RestaurantSpecs.similarName;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +16,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.algaworks.algafood.domain.model.Restaurant;
+import com.algaworks.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.algafood.domain.repository.RestaurantRepositoryQueries;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +29,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 	@PersistenceContext
 	private EntityManager manager;
 
+	@Autowired @Lazy
+	private RestaurantRepository restaurantRepository;
+
+	@Override
 	public List<Restaurant> find(String name, BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		List<Predicate> predicates = new ArrayList<>();
@@ -47,5 +57,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 		TypedQuery<Restaurant> query = manager.createQuery(criteria);
 
 		return query.getResultList();
+	}
+
+	@Override
+	public List<Restaurant> findRestaurantFilter(String name) {
+		return restaurantRepository.findAll(freeFreight().and(similarName(name)));
 	}
 }

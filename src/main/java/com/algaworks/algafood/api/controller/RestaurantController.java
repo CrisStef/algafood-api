@@ -76,4 +76,9 @@ public class RestaurantController {
 	public List<Restaurant> find(String name, BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
 		return restaurantService.find(name, initialFraightRate, finalFraightRate);
 	}
+
+	@GetMapping("/find-filter")
+	public List<Restaurant> findFilter(String name) {
+		return restaurantService.findRestaurantFilter(name);
+	}
 }

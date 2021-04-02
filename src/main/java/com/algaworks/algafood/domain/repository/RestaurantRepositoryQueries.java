@@ -7,4 +7,6 @@ import com.algaworks.algafood.domain.model.Restaurant;
 
 public interface RestaurantRepositoryQueries {
 	List<Restaurant> find(String name, BigDecimal initialFraightRate, BigDecimal finalFraightRate);
+
+	List<Restaurant> findRestaurantFilter(String name);
 }
