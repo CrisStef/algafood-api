@@ -47,12 +47,14 @@ public class Restaurant {
 	@Embedded
 	private Address address;
 
+	@JsonIgnore
 	@CreationTimestamp
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime registrationDate;
 
+	@JsonIgnore
 	@UpdateTimestamp
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime updateDate;
 
 	@JsonIgnore
