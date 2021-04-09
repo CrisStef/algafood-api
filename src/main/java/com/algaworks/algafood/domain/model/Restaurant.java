@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,8 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -39,7 +42,8 @@ public class Restaurant {
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
-	@ManyToOne
+	@JsonIgnoreProperties("hibernateLazyInitializer")
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 
@@ -63,4 +67,8 @@ public class Restaurant {
 				joinColumns = @JoinColumn(name = "restaurant_id"), 
 				inverseJoinColumns = @JoinColumn(name = "payment_id"))
 	private List<Payment> payments = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "restaurant")
+	private List<Product> products = new ArrayList<>();
 }

@@ -1,14 +1,16 @@
 package com.algaworks.algafood.domain.model;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Product {
+public class Cluster {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,17 +29,10 @@ public class Product {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
-	private String description;
-
-	@Column(nullable = false)
-	private BigDecimal price;
-
-	@Column(nullable = false)
-	private Boolean active;
-
 	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "restaurant_id", nullable = false)
-	private Restaurant restaurant;
+	@ManyToMany
+	@JoinTable(name = "permission_group",
+				joinColumns = @JoinColumn(name = "group_id"),
+				inverseJoinColumns = @JoinColumn(name = "permission_id"))
+	private List<Permission> permissions = new ArrayList<>();
 }
