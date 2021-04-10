@@ -31,8 +31,8 @@ public class Cluster {
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "permission_group",
-				joinColumns = @JoinColumn(name = "group_id"),
+	@JoinTable(name = "permission_cluster",
+				joinColumns = @JoinColumn(name = "cluster_id"),
 				inverseJoinColumns = @JoinColumn(name = "permission_id"))
 	private List<Permission> permissions = new ArrayList<>();
 }

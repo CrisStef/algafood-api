@@ -45,8 +45,8 @@ public class User {
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "group_user",
+	@JoinTable(name = "cluster_user",
 				joinColumns = @JoinColumn(name = "user_id"),
-				inverseJoinColumns = @JoinColumn(name = "group_id"))
+				inverseJoinColumns = @JoinColumn(name = "cluster_id"))
 	private List<Cluster> clusters = new ArrayList<>();
 }
