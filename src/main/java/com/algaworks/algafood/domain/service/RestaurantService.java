@@ -3,12 +3,10 @@ package com.algaworks.algafood.domain.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import com.algaworks.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
-import com.algaworks.algafood.domain.repository.KitchenRepository;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.algafood.domain.util.MergeMapper;
 
@@ -23,7 +21,6 @@ public class RestaurantService {
 	@Autowired
 	private KitchenService kitchenService;
 
-	private static final String MSG_RESTAURANT_NOT_FOUND = "Restaurant not found! Id: %d";
 	// private static final String MSG_RESTAURANT_IN_USE = "Restaurant (%d) in use and cannot be removed";
 
 	public Restaurant create(Restaurant restaurant) {
@@ -36,7 +33,7 @@ public class RestaurantService {
 	}
 
 	public Restaurant findById(Long id) {
-		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
+		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
 
 		return restaurant;
 	}

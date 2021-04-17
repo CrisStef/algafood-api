@@ -3,7 +3,7 @@ package com.algaworks.algafood.domain.service;
 import java.util.List;
 
 import com.algaworks.algafood.domain.exception.EntityInUseException;
-import com.algaworks.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.repository.KitchenRepository;
 
@@ -18,7 +18,6 @@ public class KitchenService {
 	@Autowired
 	private KitchenRepository kitchenRepository;
 
-	private static final String MSG_KITCHEN_NOT_FOUND = "Kitchen (%d) Not found";
 	private static final String MSG_KITCHEN_IN_USE = "Kitchen (%d) in use and cannot be removed";
 
 	public Kitchen save(Kitchen kitchen) {
@@ -29,7 +28,7 @@ public class KitchenService {
 		try {
 			kitchenRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id));
+			throw new KitchenNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(String.format(MSG_KITCHEN_IN_USE, id));
 		}
@@ -40,7 +39,7 @@ public class KitchenService {
 	}
 
 	public Kitchen findById(Long id) {
-		Kitchen kitchen = kitchenRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
+		Kitchen kitchen = kitchenRepository.findById(id).orElseThrow(() -> new KitchenNotFoundException(id));
 
 		return kitchen;
 	}

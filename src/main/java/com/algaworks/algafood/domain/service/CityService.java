@@ -2,8 +2,8 @@ package com.algaworks.algafood.domain.service;
 
 import java.util.List;
 
+import com.algaworks.algafood.domain.exception.CityNotFoundException;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
-import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.State;
 import com.algaworks.algafood.domain.repository.CityRepository;
@@ -22,7 +22,6 @@ public class CityService {
 	@Autowired
 	private StateService stateService;
 
-	private static final String MSG_CITY_NOT_FOUND = "City not found! Id: %d";
 	private static final String MSG_CITY_IN_USE = "City (%d) in use and cannot be removed";
 
 	public List<City> list() {
@@ -30,7 +29,7 @@ public class CityService {
 	}
 
 	public City findById(Long id) {
-		City city = cityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id)));
+		City city = cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(id));
 
 		return city;
 	}
@@ -59,7 +58,7 @@ public class CityService {
 		try {
 			cityRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id));
+			throw new CityNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(String.format(MSG_CITY_IN_USE, id));
 		}

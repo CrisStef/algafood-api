@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.algaworks.algafood.domain.exception.BusinessException;
+import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
@@ -39,16 +41,20 @@ public class RestaurantController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Restaurant create(@RequestBody Restaurant restaurant) {
-		restaurant = restaurantService.create(restaurant);
-
-		return restaurant;
+		try {
+			return restaurantService.create(restaurant);
+		} catch (KitchenNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@PatchMapping("/{restaurant_id}")
 	public Restaurant update(@RequestBody Map<String, Object> fields, @PathVariable("restaurant_id") Long id) {
-		Restaurant restaurant = restaurantService.update(fields, id);
-
-		return restaurant;
+		try {
+			return restaurantService.update(fields, id);
+		} catch (KitchenNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 
 	@GetMapping("/find-by-fraight-rate")
