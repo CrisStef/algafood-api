@@ -7,7 +7,6 @@ import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.State;
 import com.algaworks.algafood.domain.repository.CityRepository;
-import com.algaworks.algafood.domain.repository.StateRepository;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +18,36 @@ import org.springframework.stereotype.Service;
 public class CityService {
 	@Autowired
 	private CityRepository cityRepository;
+
 	@Autowired
-	private StateRepository stateRepository;
+	private StateService stateService;
+
+	private static final String MSG_CITY_NOT_FOUND = "City not found! Id: %d";
+	private static final String MSG_CITY_IN_USE = "City (%d) in use and cannot be removed";
 
 	public List<City> list() {
 		return cityRepository.findAll();
 	}
 
 	public City findById(Long id) {
-		City city = cityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("City not found! Id: %d", id)));
+		City city = cityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id)));
 
 		return city;
 	}
 
 	public City create(City city) {
 		Long stateId = city.getState().getId();
-		State state = stateRepository.findById(stateId).orElseThrow(() -> new EntityNotFoundException(String.format("State not found! Id: %d", stateId)));
+		State state = stateService.findById(stateId);
 		city.setState(state);
 
 		return cityRepository.save(city);
 	}
 
 	public City update(City city, Long id) {
-		City currentCity = cityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("City not found! Id: %d", id)));
+		City currentCity = findById(id);
 
 		Long stateId = city.getState().getId();
-		State state = stateRepository.findById(stateId).orElseThrow(() -> new RuntimeException(String.format("State not found! Id: %d", stateId)));
+		State state = stateService.findById(stateId);
 
 		BeanUtils.copyProperties(city, currentCity, "id");
 		currentCity.setState(state);
@@ -56,9 +59,9 @@ public class CityService {
 		try {
 			cityRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format("City (%d) Not found", id));
+			throw new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id));
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format("City (%d) in use and cannot be removed", id));
+			throw new EntityInUseException(String.format(MSG_CITY_IN_USE, id));
 		}
 	}
 }

@@ -18,12 +18,15 @@ public class StateService {
 	@Autowired
 	private StateRepository stateRepository;
 
+	private static final String MSG_STATE_NOT_FOUND = "State not found! Id: %d";
+	private static final String MSG_STATE_IN_USE = "State (%d) in use and cannot be removed";
+
 	public List<State> listAll() {
 		return stateRepository.findAll();
 	}
 
 	public State findById(Long id) {
-		State state = stateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("State not found! Id: %d", id)));
+		State state = stateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_STATE_NOT_FOUND, id)));
 
 		return state;
 	}
@@ -33,7 +36,7 @@ public class StateService {
 	}
 
 	public State update(State state, Long id) {
-		State currentState = stateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("State not found! Id: %d", id)));
+		State currentState = findById(id);
 
 		BeanUtils.copyProperties(state, currentState, "id");
 		currentState = stateRepository.save(currentState);
@@ -45,9 +48,9 @@ public class StateService {
 		try {
 			stateRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format("State (%d) Not found", id));
+			throw new EntityNotFoundException(String.format(MSG_STATE_NOT_FOUND, id));
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format("State (%d) in use and cannot be removed", id));
+			throw new EntityInUseException(String.format(MSG_STATE_IN_USE, id));
 		}
 	}
 }

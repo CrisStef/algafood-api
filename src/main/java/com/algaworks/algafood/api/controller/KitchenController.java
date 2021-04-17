@@ -2,14 +2,11 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
-import com.algaworks.algafood.domain.exception.EntityInUseException;
-import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,41 +29,31 @@ public class KitchenController {
 	}
 
 	@GetMapping("/{kitchen_id}")
-	public ResponseEntity<?> findById(@PathVariable("kitchen_id") Long id) {
-		try {
-			Kitchen kitchen = kitchenService.findById(id);
-			return ResponseEntity.ok().body(kitchen);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
+	public Kitchen findById(@PathVariable("kitchen_id") Long id) {
+		Kitchen kitchen = kitchenService.findById(id);
+
+		return kitchen;
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Kitchen create(@RequestBody Kitchen kitchen) {
-		return kitchenService.save(kitchen);
+		kitchen = kitchenService.save(kitchen);
+
+		return kitchen;
 	}
 
 	@PutMapping("/{kitchen_id}")
-	public ResponseEntity<?> update(@PathVariable("kitchen_id") Long id, @RequestBody Kitchen kitchen) {
-		try {
-			kitchen = kitchenService.update(kitchen, id);
-			return ResponseEntity.ok().body(kitchen);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
+	public Kitchen update(@PathVariable("kitchen_id") Long id, @RequestBody Kitchen kitchen) {
+		kitchen = kitchenService.update(kitchen, id);
+
+		return kitchen;
 	}
 
 	@DeleteMapping("/{kitchen_id}")
-	public ResponseEntity<?> remove(@PathVariable("kitchen_id") Long id) {
-		try {
-			kitchenService.remove(id);
-			return ResponseEntity.noContent().build();
-		} catch (EntityInUseException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remove(@PathVariable("kitchen_id") Long id) {
+		kitchenService.remove(id);
 	}
 
 	@GetMapping("/by-name")

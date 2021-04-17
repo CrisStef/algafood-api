@@ -21,11 +21,14 @@ public class RestaurantService {
 	private RestaurantRepository restaurantRepository;
 
 	@Autowired
-	private KitchenRepository kitchenRepository;
+	private KitchenService kitchenService;
+
+	private static final String MSG_RESTAURANT_NOT_FOUND = "Restaurant not found! Id: %d";
+	// private static final String MSG_RESTAURANT_IN_USE = "Restaurant (%d) in use and cannot be removed";
 
 	public Restaurant create(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenRepository.findById(kitchenId).orElseThrow(() -> new EntityNotFoundException(String.format("Kitchen not found! Id: %d", kitchenId)));
+		Kitchen kitchen = kitchenService.findById(kitchenId);
 
 		restaurant.setKitchen(kitchen);
 
@@ -33,13 +36,9 @@ public class RestaurantService {
 	}
 
 	public Restaurant findById(Long id) {
-		Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
 
-		if (!restaurant.isPresent()) {
-			throw new EntityNotFoundException(String.format("Restaurant not found! Id: %d", id));
-		}
-
-		return restaurant.get();
+		return restaurant;
 	}
 
 	public List<Restaurant> listAll() {
@@ -47,13 +46,13 @@ public class RestaurantService {
 	}
 
 	public Restaurant update(Map<String, Object> restaurant, Long id) {
-		Restaurant currentRestaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Restaurant not found! Id: %d", id)));
+		Restaurant currentRestaurant = findById(id);
 
 		MergeMapper.merge(restaurant, currentRestaurant);
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
 
-		Kitchen kitchen = kitchenRepository.findById(kitchenId).orElseThrow(() -> new RuntimeException(String.format("Kitchen not found! Id: %d", kitchenId)));
+		Kitchen kitchen = kitchenService.findById(kitchenId);
 
 		currentRestaurant.setKitchen(kitchen);
 

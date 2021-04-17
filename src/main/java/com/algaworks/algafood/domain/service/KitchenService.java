@@ -18,6 +18,9 @@ public class KitchenService {
 	@Autowired
 	private KitchenRepository kitchenRepository;
 
+	private static final String MSG_KITCHEN_NOT_FOUND = "Kitchen (%d) Not found";
+	private static final String MSG_KITCHEN_IN_USE = "Kitchen (%d) in use and cannot be removed";
+
 	public Kitchen save(Kitchen kitchen) {
 		return kitchenRepository.save(kitchen);
 	}
@@ -26,9 +29,9 @@ public class KitchenService {
 		try {
 			kitchenRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format("Kitchen (%d) Not found", id));
+			throw new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id));
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format("Kitchen (%d) in use and cannot be removed", id));
+			throw new EntityInUseException(String.format(MSG_KITCHEN_IN_USE, id));
 		}
 	}
 
@@ -37,13 +40,13 @@ public class KitchenService {
 	}
 
 	public Kitchen findById(Long id) {
-		Kitchen kitchen = kitchenRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Kitchen (%d) Not found", id)));
+		Kitchen kitchen = kitchenRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
 
 		return kitchen;
 	}
 	
 	public Kitchen update(Kitchen kitchen, Long id) {
-		Kitchen currentKitchen = kitchenRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Kitchen (%d) Not found", id)));
+		Kitchen currentKitchen = findById(id);
 
 		BeanUtils.copyProperties(kitchen, currentKitchen, "id");
 		currentKitchen = kitchenRepository.save(currentKitchen);
