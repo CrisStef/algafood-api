@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
@@ -42,10 +44,10 @@ public class RestaurantService {
 		return restaurantRepository.findAll();
 	}
 
-	public Restaurant update(Map<String, Object> restaurant, Long id) {
+	public Restaurant update(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
 		Restaurant currentRestaurant = findById(id);
 
-		MergeMapper.merge(restaurant, currentRestaurant);
+		MergeMapper.merge(restaurant, currentRestaurant, request);
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
 
