@@ -16,6 +16,7 @@ public class Problem {
 	private String type;
 	private String title;
 	private String detail;
-	private LocalDateTime dataHora;
+
 	private String message;
+	private LocalDateTime timestamp;
 }
