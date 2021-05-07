@@ -2,6 +2,8 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
@@ -37,7 +39,7 @@ public class KitchenController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen create(@RequestBody Kitchen kitchen) {
+	public Kitchen create(@RequestBody @Valid Kitchen kitchen) {
 		kitchen = kitchenService.save(kitchen);
 
 		return kitchen;

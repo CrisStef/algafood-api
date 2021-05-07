@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.algaworks.algafood.Groups;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
@@ -13,6 +14,7 @@ import com.algaworks.algafood.domain.service.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +44,7 @@ public class RestaurantController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant create(@RequestBody Restaurant restaurant) {
+	public Restaurant create(@RequestBody @Validated(Groups.RestaurantRegister.class) Restaurant restaurant) {
 		try {
 			return restaurantService.create(restaurant);
 		} catch (KitchenNotFoundException e) {
