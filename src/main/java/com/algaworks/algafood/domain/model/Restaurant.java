@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.algaworks.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,16 +41,17 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank(groups = Groups.RestaurantRegister.class)
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
-	@PositiveOrZero(groups = Groups.RestaurantRegister.class)
+	@PositiveOrZero
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
 	@Valid
-	@NotNull(groups = Groups.RestaurantRegister.class)
+	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
