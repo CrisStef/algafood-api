@@ -46,7 +46,7 @@ public class KitchenController {
 	}
 
 	@PutMapping("/{kitchen_id}")
-	public Kitchen update(@PathVariable("kitchen_id") Long id, @RequestBody Kitchen kitchen) {
+	public Kitchen update(@PathVariable("kitchen_id") Long id, @RequestBody @Valid Kitchen kitchen) {
 		kitchen = kitchenService.update(kitchen, id);
 
 		return kitchen;

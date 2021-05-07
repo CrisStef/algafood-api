@@ -2,6 +2,8 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.algaworks.algafood.domain.model.State;
 import com.algaworks.algafood.domain.service.StateService;
 
@@ -37,14 +39,14 @@ public class StateController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public State create(@RequestBody State state) {
+	public State create(@RequestBody @Valid State state) {
 		state = stateService.create(state);
 
 		return state;
 	}
 
 	@PutMapping("/{state_id}")
-	public State update(@RequestBody State state, @PathVariable("state_id") Long id) {
+	public State update(@RequestBody @Valid State state, @PathVariable("state_id") Long id) {
 		state = stateService.update(state, id);
 
 		return state;

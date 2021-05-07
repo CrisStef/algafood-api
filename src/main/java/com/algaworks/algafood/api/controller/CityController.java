@@ -2,6 +2,8 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.algafood.domain.model.City;
@@ -39,7 +41,7 @@ public class CityController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public City create(@RequestBody City city) {
+	public City create(@RequestBody @Valid City city) {
 		try {
 			return cityService.create(city);
 		} catch (StateNotFoundException e) {
@@ -48,7 +50,7 @@ public class CityController {
 	}
 
 	@PutMapping("/{city_id}")
-	public City update(@RequestBody City city, @PathVariable("city_id") Long id) {
+	public City update(@RequestBody @Valid City city, @PathVariable("city_id") Long id) {
 		try {
 			return cityService.update(city, id);
 		} catch (StateNotFoundException e) {
