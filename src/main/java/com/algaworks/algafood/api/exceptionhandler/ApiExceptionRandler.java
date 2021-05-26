@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -111,18 +112,24 @@ public class ApiExceptionRandler extends ResponseEntityExceptionHandler {
 		
 		BindingResult bindingResult = ex.getBindingResult();
 
-		List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
-					.map(fieldError -> {
-							String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-					
+		List<Problem.Field> problemFields = bindingResult.getAllErrors().stream()
+					.map(objectError -> {
+							String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+
+							String name = objectError.getObjectName();
+
+							if (objectError instanceof FieldError) {
+								name = ((FieldError) objectError).getField();
+							}
+
 							return Problem.Field.builder()
-									.name(fieldError.getField())
+									.name(name)
 									.userMessage(message)
 									.build();
 						})
 					.collect(Collectors.toList());
 					
-		Problem problem = createProblemBuilder(status, ProblemType.INVALID_PARAMETER, detail).message(detail).fielsd(problemFields).build();
+		Problem problem = createProblemBuilder(status, ProblemType.INVALID_PARAMETER, detail).message(detail).objects(problemFields).build();
 		
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}

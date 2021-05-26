@@ -25,6 +25,7 @@ import javax.validation.groups.Default;
 import com.algaworks.algafood.core.validation.FreightRate;
 import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.Multiple;
+import com.algaworks.algafood.core.validation.ValueZeroDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +34,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@ValueZeroDescription(fieldValue = "freightRate", fieldDescription = "name", mandatoryDescription = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity

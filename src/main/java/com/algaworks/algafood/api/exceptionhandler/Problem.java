@@ -19,7 +19,7 @@ public class Problem {
 	private String detail;
 	private String message;
 	private LocalDateTime timestamp;
-	private List<Field> fielsd;
+	private List<Field> objects;
 	@Getter
 	@Builder
 	public static class Field {
