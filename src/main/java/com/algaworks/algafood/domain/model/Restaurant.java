@@ -24,6 +24,7 @@ import javax.validation.groups.Default;
 
 import com.algaworks.algafood.core.validation.FreightRate;
 import com.algaworks.algafood.core.validation.Groups;
+import com.algaworks.algafood.core.validation.Multiple;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,6 +48,7 @@ public class Restaurant {
 
 	@NotNull
 	@FreightRate
+	@Multiple(number = 5)
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
