@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
+import com.algaworks.algafood.domain.exception.ValidatorException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
@@ -14,6 +15,8 @@ import com.algaworks.algafood.domain.util.MergeMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 
 @Service
 public class RestaurantService {
@@ -23,7 +26,8 @@ public class RestaurantService {
 	@Autowired
 	private KitchenService kitchenService;
 
-	// private static final String MSG_RESTAURANT_IN_USE = "Restaurant (%d) in use and cannot be removed";
+	@Autowired
+	private SmartValidator validator;
 
 	public Restaurant create(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
@@ -48,6 +52,8 @@ public class RestaurantService {
 		Restaurant currentRestaurant = findById(id);
 
 		MergeMapper.merge(restaurant, currentRestaurant, request);
+
+		validate(currentRestaurant, "restaurant");
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
 
@@ -76,5 +82,14 @@ public class RestaurantService {
 
 	public Restaurant findRestaurantFirst() {
 		return restaurantRepository.findFirst().get();
+	}
+
+	private void validate(Restaurant restaurant, String objectName) {
+		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurant, objectName);
+		validator.validate(restaurant, bindingResult);
+		
+		if (bindingResult.hasErrors()) {
+			throw new ValidatorException(bindingResult);
+		}
 	}
 }

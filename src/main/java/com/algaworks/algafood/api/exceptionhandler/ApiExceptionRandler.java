@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.algafood.domain.exception.ValidatorException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
@@ -108,30 +109,7 @@ public class ApiExceptionRandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object>  handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.");
-		
-		BindingResult bindingResult = ex.getBindingResult();
-
-		List<Problem.Field> problemFields = bindingResult.getAllErrors().stream()
-					.map(objectError -> {
-							String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
-
-							String name = objectError.getObjectName();
-
-							if (objectError instanceof FieldError) {
-								name = ((FieldError) objectError).getField();
-							}
-
-							return Problem.Field.builder()
-									.name(name)
-									.userMessage(message)
-									.build();
-						})
-					.collect(Collectors.toList());
-					
-		Problem problem = createProblemBuilder(status, ProblemType.INVALID_PARAMETER, detail).message(detail).objects(problemFields).build();
-		
-		return handleExceptionInternal(ex, problem, headers, status, request);
+		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
 	}
 
 	@Override
@@ -160,6 +138,11 @@ public class ApiExceptionRandler extends ResponseEntityExceptionHandler {
 
 		return super.handleTypeMismatch(ex, headers, status, request);
 	}
+
+	@ExceptionHandler({ ValidatorException.class })
+	public ResponseEntity<Object> handleValidacaoException(ValidatorException ex, WebRequest request) {
+		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}  
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
@@ -206,5 +189,34 @@ public class ApiExceptionRandler extends ResponseEntityExceptionHandler {
 		return references.stream()
 			.map(ref -> ref.getFieldName())
 			.collect(Collectors.joining("."));
+	}
+
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ProblemType problemType = ProblemType.INVALID_PARAMETER;
+		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+		
+		List<Problem.Field> problemFields = bindingResult.getAllErrors().stream()
+					.map(objectError -> {
+							String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+
+							String name = objectError.getObjectName();
+
+							if (objectError instanceof FieldError) {
+								name = ((FieldError) objectError).getField();
+							}
+
+							return Problem.Field.builder()
+									.name(name)
+									.userMessage(message)
+									.build();
+						})
+					.collect(Collectors.toList());
+		
+		Problem problem = createProblemBuilder(status, problemType, detail)
+			.message(detail)
+			.objects(problemFields)
+			.build();
+
+		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 }
