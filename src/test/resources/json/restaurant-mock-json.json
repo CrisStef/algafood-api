@@ -1,0 +1,9 @@
+{
+	"valid" : {
+		"name": "New York Barbecue",
+		"freightRate": 25,
+		"kitchen": {
+			"id": 2
+		}
+	}
+}

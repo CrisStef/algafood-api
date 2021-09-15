@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.repository.KitchenRepository;
 import com.algaworks.algafood.util.DatabaseCleaner;
+import com.algaworks.algafood.util.ResourceUtils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
@@ -37,12 +38,21 @@ public class KitchenServiceApiT {
 	@Autowired
 	private KitchenRepository kitchenRepository;
 
+	private int kitchenCount;
+
+	private String jsonInsertKitchen;
+
+	private Kitchen kitchenBrasileira;
+
+	private final int kitchenIdInvalid = 100;
+
 	@Before
 	public void setUp() {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(); /** */
 		RestAssured.port = port;
 		RestAssured.basePath = "/kitchens";
 
+		this.jsonInsertKitchen = ResourceUtils.getContentFromResource("/json/kitchen-mock-json.json");
 		databaseCleaner.clearTables();
 		this.insertData();
 	}
@@ -58,32 +68,44 @@ public class KitchenServiceApiT {
 	}
 
 	@Test
-	public void have4KitchensInQueryTest() {
+	public void returnStatusCreatedWhenInsertKitchenTest() {
+		given()
+			.body(jsonInsertKitchen)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.CREATED.value());
+	}
+
+	@Test
+	public void checkQuantityKitchensInQueryTest() {
 		given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.body("", hasSize(2))
-			.body("name", hasItems("Brasileira", "Tailandesa"));
+			.body("", hasSize(this.kitchenCount))
+			.body("name", hasItems(kitchenBrasileira.getName()));
 	}
 
 	@Test
 	public void returnStatusOkWhenGetKitchenExistsTest() {
 		given()
-			.pathParam("kitchenId", 2)
+			.pathParam("kitchenId", kitchenBrasileira.getId())
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{kitchenId}")
 		.then()
 			.statusCode(HttpStatus.OK.value())
-			.body("name", equalTo("Brasileira"));
+			.body("name", equalTo(kitchenBrasileira.getName()));
 	}
 
 	@Test
 	public void returnStatusNotFoundWhenGetKitcheNonexistentTest() {
 		given()
-			.pathParam("kitchenId", 100)
+			.pathParam("kitchenId", kitchenIdInvalid)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{kitchenId}")
@@ -96,8 +118,10 @@ public class KitchenServiceApiT {
 		kitchen1.setName("Tailandesa");
 		kitchenRepository.save(kitchen1);
 
-		Kitchen kitchen2 = new Kitchen();
-		kitchen2.setName("Brasileira");
-		kitchenRepository.save(kitchen2);
+		kitchenBrasileira = new Kitchen();
+		kitchenBrasileira.setName("Brasileira");
+		kitchenRepository.save(kitchenBrasileira);
+
+		this.kitchenCount = kitchenRepository.findAll().size();
 	}
 }
