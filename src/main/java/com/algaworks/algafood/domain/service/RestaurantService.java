@@ -15,6 +15,7 @@ import com.algaworks.algafood.domain.util.MergeMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
@@ -29,6 +30,7 @@ public class RestaurantService {
 	@Autowired
 	private SmartValidator validator;
 
+	@Transactional
 	public Restaurant create(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(kitchenId);
@@ -48,6 +50,7 @@ public class RestaurantService {
 		return restaurantRepository.findAll();
 	}
 
+	@Transactional
 	public Restaurant update(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
 		Restaurant currentRestaurant = findById(id);
 

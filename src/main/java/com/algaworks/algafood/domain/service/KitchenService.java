@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KitchenService {
@@ -20,10 +21,12 @@ public class KitchenService {
 
 	private static final String MSG_KITCHEN_IN_USE = "Kitchen (%d) in use and cannot be removed";
 
+	@Transactional
 	public Kitchen save(Kitchen kitchen) {
 		return kitchenRepository.save(kitchen);
 	}
 
+	@Transactional
 	public void remove(Long id) {
 		try {
 			kitchenRepository.deleteById(id);
@@ -44,6 +47,7 @@ public class KitchenService {
 		return kitchen;
 	}
 	
+	@Transactional
 	public Kitchen update(Kitchen kitchen, Long id) {
 		Kitchen currentKitchen = findById(id);
 
