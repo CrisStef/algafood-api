@@ -24,23 +24,19 @@ public class ResourceUtils {
 		String dataOutput = "";
 
 		try {
-		InputStream jsonFileObject = ResourceUtils.class.getResourceAsStream(resourceName);
+			String json = getContentFromResource(resourceName);
 
-		String json = StreamUtils.copyToString(jsonFileObject, Charset.forName("UTF-8"));
+			jsonDataObject = new JSONObject(json);
+		
+			assert jsonDataObject != null;
+		
+			jsonDataObject = (JSONObject) jsonDataObject.get(dataGroup);
+			dataOutput = jsonDataObject.toString();
 
-		jsonDataObject = new JSONObject(json);
-	
-		assert jsonDataObject != null;
-	
-		jsonDataObject = (JSONObject) jsonDataObject.get(dataGroup);
-		dataOutput = jsonDataObject.toString();
+			return dataOutput;
 
-		return dataOutput;
-
-		} catch (JSONException | IOException e) {
-			e.printStackTrace();
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
 		}
-
-		return dataOutput;
 	}
 }

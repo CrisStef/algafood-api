@@ -44,7 +44,7 @@ public class KitchenServiceApiT {
 
 	private Kitchen kitchenBrasileira;
 
-	private final int kitchenIdInvalid = 100;
+	private final int KITCHEN_ID_INVALID = 100;
 
 	@Before
 	public void setUp() {
@@ -105,7 +105,7 @@ public class KitchenServiceApiT {
 	@Test
 	public void returnStatusNotFoundWhenGetKitcheNonexistentTest() {
 		given()
-			.pathParam("kitchenId", kitchenIdInvalid)
+			.pathParam("kitchenId", KITCHEN_ID_INVALID)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{kitchenId}")

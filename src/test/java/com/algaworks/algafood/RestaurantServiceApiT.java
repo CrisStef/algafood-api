@@ -36,7 +36,9 @@ public class RestaurantServiceApiT {
 
 	private final int RESTAURANT_ID_INVALID = 100;
 
-	private String jsonRestaurant;
+	private String jsonNewRestaurant;
+
+	private String jsonRestaurantWithoutKitchen;
 	
 	@Before
 	public void setUp() {
@@ -44,7 +46,9 @@ public class RestaurantServiceApiT {
 		RestAssured.port = port;
 		RestAssured.basePath = "/restaurants";
 
-		jsonRestaurant = ResourceUtils.getJsonDataObject("/json/restaurant-mock-json.json", "valid");
+		jsonNewRestaurant = ResourceUtils.getJsonDataObject("/json/restaurant-mock-json.json", "newRestaurant");
+		jsonRestaurantWithoutKitchen = ResourceUtils.getJsonDataObject("/json/restaurant-mock-json.json", "restaurantWithoutKitchen");
+
 		databaseCleaner.clearTables();
 		this.insertData();
 	}
@@ -60,15 +64,38 @@ public class RestaurantServiceApiT {
 	}
 	
 	@Test
-	public void returnStatusCreatedWhenInsertRestaurantsTest() {
+	public void returnStatusCreatedWhenInsertRestaurantTest() {
 		given()
-			.body(jsonRestaurant)
+			.body(jsonNewRestaurant)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
 			.statusCode(HttpStatus.CREATED.value());
+	}
+
+	@Test
+	public void returnStatusBadRequestWhenInsertRestaurantWithoutKitchenTest() {
+		given()
+			.body(jsonRestaurantWithoutKitchen)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+
+	@Test
+	public void returnStatusNotFoundWhenGetRestaurantNonexistentTest() {
+		given()
+			.pathParam("restaurantId", RESTAURANT_ID_INVALID)
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{restaurantId}")
+		.then()
+			.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 
 	private void insertData() {
