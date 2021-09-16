@@ -21,19 +21,13 @@ public class ResourceUtils {
 
 	public static String getJsonDataObject(String resourceName, String dataGroup) {
 		JSONObject jsonDataObject = null;
-		String dataOutput = "";
 
 		try {
-			String json = getContentFromResource(resourceName);
-
-			jsonDataObject = new JSONObject(json);
+			jsonDataObject = new JSONObject(getContentFromResource(resourceName));
 		
 			assert jsonDataObject != null;
 		
-			jsonDataObject = (JSONObject) jsonDataObject.get(dataGroup);
-			dataOutput = jsonDataObject.toString();
-
-			return dataOutput;
+			return jsonDataObject.get(dataGroup).toString();
 
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
