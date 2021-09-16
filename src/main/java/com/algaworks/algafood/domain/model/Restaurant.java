@@ -27,6 +27,7 @@ import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.Multiple;
 import com.algaworks.algafood.core.validation.ValueZeroDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -54,6 +55,7 @@ public class Restaurant {
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
+	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@Valid
 	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
 	@NotNull
