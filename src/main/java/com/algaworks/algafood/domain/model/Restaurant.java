@@ -26,8 +26,6 @@ import com.algaworks.algafood.core.validation.FreightRate;
 import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.Multiple;
 import com.algaworks.algafood.core.validation.ValueZeroDescription;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -55,7 +53,6 @@ public class Restaurant {
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
-	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@Valid
 	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
 	@NotNull
@@ -63,28 +60,23 @@ public class Restaurant {
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 
-	@JsonIgnore
 	@Embedded
 	private Address address;
 
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime registrationDate;
 
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime updateDate;
 
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "payment_restaurant",
 				joinColumns = @JoinColumn(name = "restaurant_id"), 
 				inverseJoinColumns = @JoinColumn(name = "payment_id"))
 	private List<Payment> payments = new ArrayList<>();
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 }
