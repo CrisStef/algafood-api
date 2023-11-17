@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.algaworks.algafood.domain.model.enums.SaleOrderStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -41,7 +40,6 @@ public class SaleOrder {
 	@Column(nullable = false)
 	private BigDecimal total_value;
 
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime registrationDate;
@@ -55,7 +53,6 @@ public class SaleOrder {
 	@Column(columnDefinition = "datetime")
 	private LocalDateTime deliveryDate;
 
-	@JsonIgnore
 	@Embedded
 	private Address deliveryAddress;
 
