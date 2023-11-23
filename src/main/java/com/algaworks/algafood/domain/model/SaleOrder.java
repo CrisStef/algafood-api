@@ -1,7 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,16 +42,16 @@ public class SaleOrder {
 
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime registrationDate;
+	private OffsetDateTime registrationDate;
 
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime confirmationDate;
+	private OffsetDateTime confirmationDate;
 
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime cancellationDate;
+	private OffsetDateTime cancellationDate;
 
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime deliveryDate;
+	private OffsetDateTime deliveryDate;
 
 	@Embedded
 	private Address deliveryAddress;
