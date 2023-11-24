@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.model.request.RestaurantRequest;
+import com.algaworks.algafood.api.model.response.RestaurantResponse;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
@@ -43,7 +45,7 @@ public class RestaurantController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant create(@RequestBody @Valid Restaurant restaurant) {
+	public RestaurantResponse create(@RequestBody @Valid RestaurantRequest restaurant) {
 		try {
 			return restaurantService.create(restaurant);
 		} catch (KitchenNotFoundException e) {

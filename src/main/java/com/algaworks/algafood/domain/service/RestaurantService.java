@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.algaworks.algafood.api.mapper.RestaurantMapper;
+import com.algaworks.algafood.api.model.request.RestaurantRequest;
+import com.algaworks.algafood.api.model.response.RestaurantResponse;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.exception.ValidatorException;
 import com.algaworks.algafood.domain.model.Kitchen;
@@ -30,8 +33,17 @@ public class RestaurantService {
 	@Autowired
 	private SmartValidator validator;
 
+	@Autowired 
+	private RestaurantMapper restaurantMapper;
+
+	public RestaurantResponse create(RestaurantRequest restaurantRequest) {
+		Restaurant restaurant = restaurantMapper.restaurantRequestForRestaurant(restaurantRequest);
+
+		return restaurantMapper.restaurantForRestaurantResponse(this.save(restaurant));
+	}
+
 	@Transactional
-	public Restaurant create(Restaurant restaurant) {
+	private Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(kitchenId);
 

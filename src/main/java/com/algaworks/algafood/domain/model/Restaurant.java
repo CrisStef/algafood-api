@@ -16,15 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
-import com.algaworks.algafood.core.validation.FreightRate;
-import com.algaworks.algafood.core.validation.Groups;
-import com.algaworks.algafood.core.validation.Multiple;
 import com.algaworks.algafood.core.validation.ValueZeroDescription;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,19 +35,12 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
-	@NotNull
-	@FreightRate
-	@Multiple(number = 5)
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
-	@Valid
-	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
