@@ -42,6 +42,18 @@ public class RestaurantService {
 		return restaurantMapper.restaurantForRestaurantResponse(this.save(restaurant));
 	}
 
+	public RestaurantResponse getById(Long id) {
+		return restaurantMapper.restaurantForRestaurantResponse(this.findById(id));
+	}
+
+	public RestaurantResponse alter(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
+		return restaurantMapper.restaurantForRestaurantResponse(this.update(restaurant, id, request));
+	}
+
+	public List<RestaurantResponse> findAll() {
+		return restaurantMapper.restaurantListForRestaurantListResponse(this.listAll());
+	}
+
 	@Transactional
 	private Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
@@ -52,18 +64,16 @@ public class RestaurantService {
 		return restaurantRepository.save(restaurant);
 	}
 
-	public Restaurant findById(Long id) {
-		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
-
-		return restaurant;
+	private Restaurant findById(Long id) {
+		return restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
 	}
 
-	public List<Restaurant> listAll() {
+	private List<Restaurant> listAll() {
 		return restaurantRepository.findAll();
 	}
 
 	@Transactional
-	public Restaurant update(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
+	private Restaurant update(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
 		Restaurant currentRestaurant = findById(id);
 
 		MergeMapper.merge(restaurant, currentRestaurant, request);

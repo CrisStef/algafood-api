@@ -2,12 +2,16 @@ package com.algaworks.algafood.domain.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import com.algaworks.algafood.api.mapper.KitchenMapper;
+import com.algaworks.algafood.api.model.request.KitchenRequest;
+import com.algaworks.algafood.api.model.response.KitchenResponse;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.repository.KitchenRepository;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,6 +24,29 @@ public class KitchenService {
 	private KitchenRepository kitchenRepository;
 
 	private static final String MSG_KITCHEN_IN_USE = "Kitchen (%d) in use and cannot be removed";
+
+	@Autowired 
+	private KitchenMapper kitchenMapper;
+
+	public KitchenResponse create(KitchenRequest kitchenRequest) {
+		Kitchen kitchen = kitchenRepository.save(kitchenMapper.kitchenRequestForKitchen(kitchenRequest));
+
+		return kitchenMapper.kitchenForKitchenResponse(kitchen);
+	}
+
+	public KitchenResponse getById(Long id) {
+		return kitchenMapper.kitchenForKitchenResponse(this.findById(id));
+	}
+
+	public List<KitchenResponse> findAll() {
+		return kitchenMapper.kitchenListForKitchenListResponse(this.listAll());
+	}
+
+	public @Valid KitchenResponse alter(@Valid KitchenRequest kitchenRequest, Long id) {
+		Kitchen kitchen = this.update(kitchenMapper.kitchenRequestForKitchen(kitchenRequest), id);
+
+		return kitchenMapper.kitchenForKitchenResponse(kitchen);
+	}
 
 	@Transactional
 	public Kitchen save(Kitchen kitchen) {
@@ -51,7 +78,8 @@ public class KitchenService {
 	public Kitchen update(Kitchen kitchen, Long id) {
 		Kitchen currentKitchen = findById(id);
 
-		BeanUtils.copyProperties(kitchen, currentKitchen, "id");
+		kitchenMapper.copyKitchenForCurrentKitchen(kitchen, currentKitchen);
+
 		currentKitchen = kitchenRepository.save(currentKitchen);
 
 		return currentKitchen;

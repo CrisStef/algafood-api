@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.model.request.KitchenRequest;
+import com.algaworks.algafood.api.model.response.KitchenResponse;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
@@ -26,30 +28,24 @@ public class KitchenController {
 	private KitchenService kitchenService;
 
 	@GetMapping
-	public List<Kitchen> listAll() {
-		return kitchenService.listAll();
+	public List<KitchenResponse> listAll() {
+		return kitchenService.findAll();
 	}
 
 	@GetMapping("/{kitchen_id}")
-	public Kitchen findById(@PathVariable("kitchen_id") Long id) {
-		Kitchen kitchen = kitchenService.findById(id);
-
-		return kitchen;
+	public KitchenResponse findById(@PathVariable("kitchen_id") Long id) {
+		return kitchenService.getById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen create(@RequestBody @Valid Kitchen kitchen) {
-		kitchen = kitchenService.save(kitchen);
-
-		return kitchen;
+	public KitchenResponse create(@RequestBody @Valid KitchenRequest kitchen) {
+		return kitchenService.create(kitchen);
 	}
 
 	@PutMapping("/{kitchen_id}")
-	public Kitchen update(@PathVariable("kitchen_id") Long id, @RequestBody @Valid Kitchen kitchen) {
-		kitchen = kitchenService.update(kitchen, id);
-
-		return kitchen;
+	public KitchenResponse update(@PathVariable("kitchen_id") Long id, @RequestBody @Valid KitchenRequest kitchen) {
+		return kitchenService.alter(kitchen, id);
 	}
 
 	@DeleteMapping("/{kitchen_id}")

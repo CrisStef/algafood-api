@@ -32,13 +32,13 @@ public class RestaurantController {
 	private RestaurantService restaurantService;
 
 	@GetMapping
-	public List<Restaurant> listAll() {
-		return restaurantService.listAll();
+	public List<RestaurantResponse> listAll() {
+		return restaurantService.findAll();
 	}
 
 	@GetMapping("/{restaurant_id}")
-	public Restaurant findById(@PathVariable("restaurant_id") Long id) {
-		Restaurant restaurant = restaurantService.findById(id);
+	public RestaurantResponse findById(@PathVariable("restaurant_id") Long id) {
+		RestaurantResponse restaurant = restaurantService.getById(id);
 
 		return restaurant;
 	}
@@ -54,9 +54,9 @@ public class RestaurantController {
 	}
 
 	@PatchMapping("/{restaurant_id}")
-	public Restaurant update(@RequestBody Map<String, Object> fields, @PathVariable("restaurant_id") Long id, HttpServletRequest request) {
+	public RestaurantResponse update(@RequestBody Map<String, Object> fields, @PathVariable("restaurant_id") Long id, HttpServletRequest request) {
 		try {
-			return restaurantService.update(fields, id, request);
+			return restaurantService.alter(fields, id, request);
 		} catch (KitchenNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
