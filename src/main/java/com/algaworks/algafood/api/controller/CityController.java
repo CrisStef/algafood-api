@@ -4,9 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.model.request.CityRequest;
+import com.algaworks.algafood.api.model.response.CityResponse;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.StateNotFoundException;
-import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.service.CityService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,20 +29,18 @@ public class CityController {
 	private CityService cityService;
 
 	@GetMapping
-	public List<City> list() {
-		return cityService.list();
+	public List<CityResponse> findAll() {
+		return cityService.findAll();
 	}
 
 	@GetMapping("/{city_id}")
-	public City findById(@PathVariable("city_id") Long id) {
-		City city = cityService.findById(id);
-
-		return city;
+	public CityResponse getById(@PathVariable("city_id") Long id) {
+		return cityService.getById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public City create(@RequestBody @Valid City city) {
+	public CityResponse create(@RequestBody @Valid CityRequest city) {
 		try {
 			return cityService.create(city);
 		} catch (StateNotFoundException e) {
@@ -50,9 +49,9 @@ public class CityController {
 	}
 
 	@PutMapping("/{city_id}")
-	public City update(@RequestBody @Valid City city, @PathVariable("city_id") Long id) {
+	public CityResponse alter(@RequestBody @Valid CityRequest city, @PathVariable("city_id") Long id) {
 		try {
-			return cityService.update(city, id);
+			return cityService.alter(city, id);
 		} catch (StateNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}

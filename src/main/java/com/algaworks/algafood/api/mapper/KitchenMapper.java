@@ -24,10 +24,6 @@ public class KitchenMapper {
 		modelMapper.map(kitchen, currentKitchen);
 	}
 
-	// public void copyKitchenForCurrentKitchen(KitchenRequest kitchen, Kitchen currentKitchen) {
-	// 	modelMapper.map(kitchen, currentKitchen);
-	// }
-
 	public KitchenResponse kitchenForKitchenResponse(Kitchen kitchen) {
 		return modelMapper.map(kitchen, KitchenResponse.class);
 	}

@@ -54,6 +54,10 @@ public class RestaurantService {
 		return restaurantMapper.restaurantListForRestaurantListResponse(this.listAll());
 	}
 
+	public List<RestaurantResponse> getByName(String name, Long kitchenId) {
+		return restaurantMapper.restaurantListForRestaurantListResponse(this.findByName(name, kitchenId));
+	}
+
 	@Transactional
 	private Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();

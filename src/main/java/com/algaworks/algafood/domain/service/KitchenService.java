@@ -38,11 +38,15 @@ public class KitchenService {
 		return kitchenMapper.kitchenForKitchenResponse(this.findById(id));
 	}
 
+	public List<KitchenResponse> getByName(String name) {
+		return kitchenMapper.kitchenListForKitchenListResponse(this.findByName(name));
+	}
+
 	public List<KitchenResponse> findAll() {
 		return kitchenMapper.kitchenListForKitchenListResponse(this.listAll());
 	}
 
-	public @Valid KitchenResponse alter(@Valid KitchenRequest kitchenRequest, Long id) {
+	public KitchenResponse alter(@Valid KitchenRequest kitchenRequest, Long id) {
 		Kitchen kitchen = this.update(kitchenMapper.kitchenRequestForKitchen(kitchenRequest), id);
 
 		return kitchenMapper.kitchenForKitchenResponse(kitchen);
@@ -57,6 +61,7 @@ public class KitchenService {
 	public void remove(Long id) {
 		try {
 			kitchenRepository.deleteById(id);
+			kitchenRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new KitchenNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
@@ -64,7 +69,7 @@ public class KitchenService {
 		}
 	}
 
-	public List<Kitchen> listAll() {
+	private List<Kitchen> listAll() {
 		return kitchenRepository.findAll();
 	}
 
@@ -75,7 +80,7 @@ public class KitchenService {
 	}
 	
 	@Transactional
-	public Kitchen update(Kitchen kitchen, Long id) {
+	private Kitchen update(Kitchen kitchen, Long id) {
 		Kitchen currentKitchen = findById(id);
 
 		kitchenMapper.copyKitchenForCurrentKitchen(kitchen, currentKitchen);

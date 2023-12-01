@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import com.algaworks.algafood.api.model.request.KitchenRequest;
 import com.algaworks.algafood.api.model.response.KitchenResponse;
-import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,12 @@ public class KitchenController {
 	private KitchenService kitchenService;
 
 	@GetMapping
-	public List<KitchenResponse> listAll() {
+	public List<KitchenResponse> findAll() {
 		return kitchenService.findAll();
 	}
 
 	@GetMapping("/{kitchen_id}")
-	public KitchenResponse findById(@PathVariable("kitchen_id") Long id) {
+	public KitchenResponse getById(@PathVariable("kitchen_id") Long id) {
 		return kitchenService.getById(id);
 	}
 
@@ -44,7 +43,7 @@ public class KitchenController {
 	}
 
 	@PutMapping("/{kitchen_id}")
-	public KitchenResponse update(@PathVariable("kitchen_id") Long id, @RequestBody @Valid KitchenRequest kitchen) {
+	public KitchenResponse alter(@PathVariable("kitchen_id") Long id, @RequestBody @Valid KitchenRequest kitchen) {
 		return kitchenService.alter(kitchen, id);
 	}
 
@@ -55,7 +54,7 @@ public class KitchenController {
 	}
 
 	@GetMapping("/by-name")
-	public List<Kitchen> findByName(String name) {
-		return kitchenService.findByName(name);
+	public List<KitchenResponse> getByName(String name) {
+		return kitchenService.getByName(name);
 	}
 }

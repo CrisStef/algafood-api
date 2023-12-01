@@ -32,12 +32,12 @@ public class RestaurantController {
 	private RestaurantService restaurantService;
 
 	@GetMapping
-	public List<RestaurantResponse> listAll() {
+	public List<RestaurantResponse> findAll() {
 		return restaurantService.findAll();
 	}
 
 	@GetMapping("/{restaurant_id}")
-	public RestaurantResponse findById(@PathVariable("restaurant_id") Long id) {
+	public RestaurantResponse getById(@PathVariable("restaurant_id") Long id) {
 		RestaurantResponse restaurant = restaurantService.getById(id);
 
 		return restaurant;
@@ -54,7 +54,7 @@ public class RestaurantController {
 	}
 
 	@PatchMapping("/{restaurant_id}")
-	public RestaurantResponse update(@RequestBody Map<String, Object> fields, @PathVariable("restaurant_id") Long id, HttpServletRequest request) {
+	public RestaurantResponse alter(@RequestBody Map<String, Object> fields, @PathVariable("restaurant_id") Long id, HttpServletRequest request) {
 		try {
 			return restaurantService.alter(fields, id, request);
 		} catch (KitchenNotFoundException e) {
@@ -62,14 +62,14 @@ public class RestaurantController {
 		}
 	}
 
+	@GetMapping("/find-by-name")
+	public List<RestaurantResponse> getByName(String name, Long kitchenId) {
+		return restaurantService.getByName(name, kitchenId);
+	}
+
 	@GetMapping("/find-by-fraight-rate")
 	public List<Restaurant> findByFraightRate(BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
 		return restaurantService.findByFraightRate(initialFraightRate, finalFraightRate);
-	}
-
-	@GetMapping("/find-by-name")
-	public List<Restaurant> findByName(String name, Long kitchenId) {
-		return restaurantService.findByName(name, kitchenId);
 	}
 
 	@GetMapping("/find")

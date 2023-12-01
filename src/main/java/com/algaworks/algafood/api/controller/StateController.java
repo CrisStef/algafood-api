@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.algaworks.algafood.domain.model.State;
+import com.algaworks.algafood.api.model.request.StateRequest;
+import com.algaworks.algafood.api.model.response.StateResponse;
 import com.algaworks.algafood.domain.service.StateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,30 +27,24 @@ public class StateController {
 	private StateService stateService;
 
 	@GetMapping
-	public List<State> listAll() {
-		return stateService.listAll();
+	public List<StateResponse> findAll() {
+		return stateService.findAll();
 	}
 
 	@GetMapping("/{state_id}")
-	public State findById(@PathVariable("state_id") Long id) {
-		State state = stateService.findById(id);
-
-		return state;
+	public StateResponse getById(@PathVariable("state_id") Long id) {
+		return stateService.getById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public State create(@RequestBody @Valid State state) {
-		state = stateService.create(state);
-
-		return state;
+	public StateResponse create(@RequestBody @Valid StateRequest state) {
+		return stateService.create(state);
 	}
 
 	@PutMapping("/{state_id}")
-	public State update(@RequestBody @Valid State state, @PathVariable("state_id") Long id) {
-		state = stateService.update(state, id);
-
-		return state;
+	public StateResponse alter(@RequestBody @Valid StateRequest state, @PathVariable("state_id") Long id) {
+		return stateService.alter(state, id);
 	}
 
 	@DeleteMapping("/{state_id}")
