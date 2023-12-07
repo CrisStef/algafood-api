@@ -45,6 +45,9 @@ public class Restaurant {
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 
+	@Column(nullable = false)
+	private Boolean status = Boolean.TRUE;
+
 	@Embedded
 	private Address address;
 
@@ -64,4 +67,12 @@ public class Restaurant {
 
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
+
+	public void activate() {
+		this.setStatus(Boolean.TRUE);
+	}
+
+	public void disable() {
+		this.setStatus(Boolean.FALSE);
+	}
 }

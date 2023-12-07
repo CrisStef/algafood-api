@@ -15,12 +15,12 @@ insert into state (id, name) values (2, 'São Paulo');
 insert into city (id, name, state_id) values (1, 'Salvador', 1);
 insert into city (id, name, state_id) values (2, 'São Paulo', 2);
 
-insert into restaurant (id, name, freight_rate, kitchen_id, address_city_id, address_zip_code, address_public_place, address_number, address_district, address_complement, registration_date, update_date) values (6, 'Pizza Hut', 10.2, 1, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro', 'Bloco 29', utc_timestamp, utc_timestamp);
-insert into restaurant (id, name, freight_rate, kitchen_id, registration_date, update_date) values (1, 'Outback', 14.50, 1, utc_timestamp, utc_timestamp);
-insert into restaurant (id, name, freight_rate, kitchen_id, registration_date, update_date) values (2, 'Madero', 10.25, 2, utc_timestamp, utc_timestamp);
-insert into restaurant (id, name, freight_rate, kitchen_id, registration_date, update_date) values (3, 'Java Steakhouse', 12, 3, utc_timestamp, utc_timestamp);
-insert into restaurant (id, name, freight_rate, kitchen_id, registration_date, update_date) values (4, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp);
-insert into restaurant (id, name, freight_rate, kitchen_id, registration_date, update_date) values (5, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp);
+insert into restaurant (id, name, freight_rate, kitchen_id, status, address_city_id, address_zip_code, address_public_place, address_number, address_district, address_complement, registration_date, update_date) values (6, 'Pizza Hut', 10.2, 1, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro', 'Bloco 29', true, utc_timestamp, utc_timestamp);
+insert into restaurant (id, name, freight_rate, kitchen_id, status, registration_date, update_date) values (1, 'Outback', 14.50, 1, true, utc_timestamp, utc_timestamp);
+insert into restaurant (id, name, freight_rate, kitchen_id, status, registration_date, update_date) values (2, 'Madero', 10.25, 2, true, utc_timestamp, utc_timestamp);
+insert into restaurant (id, name, freight_rate, kitchen_id, status, registration_date, update_date) values (3, 'Java Steakhouse', 12, 3, true, utc_timestamp, utc_timestamp);
+insert into restaurant (id, name, freight_rate, kitchen_id, status, registration_date, update_date) values (4, 'Lanchonete do Tio Sam', 11, 4, true, utc_timestamp, utc_timestamp);
+insert into restaurant (id, name, freight_rate, kitchen_id, status, registration_date, update_date) values (5, 'Bar da Maria', 6, 4, true, utc_timestamp, utc_timestamp);
 
 insert into payment_restaurant (restaurant_id, payment_id) values (1,1), (1,2), (2,1);
 
