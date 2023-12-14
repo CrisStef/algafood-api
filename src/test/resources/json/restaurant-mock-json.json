@@ -1,0 +1,14 @@
+{
+	"newRestaurant" : {
+		"name": "New York Barbecue",
+		"freightRate": 25,
+		"kitchen": {
+			"id": 2
+		}
+	},
+
+	"restaurantWithoutKitchen" : {
+		"name": "New York Barbecue",
+		"freightRate": 25
+	}
+}
