@@ -1,11 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.algaworks.algafood.api.mapper.RestaurantMapper;
 import com.algaworks.algafood.api.model.request.RestaurantRequest;
 import com.algaworks.algafood.api.model.response.RestaurantResponse;
@@ -15,12 +9,16 @@ import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.algafood.domain.util.MergeMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class RestaurantService {
@@ -46,8 +44,13 @@ public class RestaurantService {
 		return restaurantMapper.restaurantForRestaurantResponse(this.findById(id));
 	}
 
-	public RestaurantResponse alter(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
-		return restaurantMapper.restaurantForRestaurantResponse(this.update(restaurant, id, request));
+	public RestaurantResponse alter(Map<String, Object> restaurantMap, Long id, HttpServletRequest request) {
+        RestaurantRequest restaurantRequest = new RestaurantRequest();
+        MergeMapper.merge(restaurantMap, restaurantRequest, request);
+
+        validate(restaurantRequest, "restaurantRequest");
+
+		return restaurantMapper.restaurantForRestaurantResponse(this.update(restaurantRequest, id, request));
 	}
 
 	public List<RestaurantResponse> findAll() {
@@ -91,12 +94,10 @@ public class RestaurantService {
 	}
 
 	@Transactional
-	private Restaurant update(Map<String, Object> restaurant, Long id, HttpServletRequest request) {
+	private Restaurant update(RestaurantRequest restaurantRequest, Long id, HttpServletRequest request) {
 		Restaurant currentRestaurant = findById(id);
 
-		MergeMapper.merge(restaurant, currentRestaurant, request);
-
-		validate(currentRestaurant, "restaurant");
+        restaurantMapper.copyRestaurantRequestForRestaurant(restaurantRequest, currentRestaurant);
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
 
@@ -127,7 +128,7 @@ public class RestaurantService {
 		return restaurantRepository.findFirst().get();
 	}
 
-	private void validate(Restaurant restaurant, String objectName) {
+	private void validate(RestaurantRequest restaurant, String objectName) {
 		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurant, objectName);
 		validator.validate(restaurant, bindingResult);
 		

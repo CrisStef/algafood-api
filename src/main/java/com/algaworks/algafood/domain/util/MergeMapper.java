@@ -1,17 +1,15 @@
 package com.algaworks.algafood.domain.util;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
+import java.util.Map;
 
 public class MergeMapper {
 	public static void merge(Map<String, Object> originData, Object destinyData, HttpServletRequest request) {
