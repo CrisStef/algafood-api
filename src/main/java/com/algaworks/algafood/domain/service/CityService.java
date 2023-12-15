@@ -79,7 +79,8 @@ public class CityService {
 		Long stateId = city.getState().getId();
 		State state = stateService.findById(stateId);
 
-		BeanUtils.copyProperties(city, currentCity, "id");
+		cityMapper.copyCityForCurrentCity(city, currentCity);
+
 		currentCity.setState(state);
 
 		return cityRepository.save(currentCity);

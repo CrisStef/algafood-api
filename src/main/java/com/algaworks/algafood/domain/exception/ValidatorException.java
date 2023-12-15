@@ -8,6 +8,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ValidatorException extends RuntimeException {
-	
 	private BindingResult bindingResult;
 }

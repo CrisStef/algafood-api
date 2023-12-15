@@ -69,7 +69,8 @@ public class StateService {
 	private State update(State state, Long id) {
 		State currentState = findById(id);
 
-		BeanUtils.copyProperties(state, currentState, "id");
+		stateMapper.copyStateForCurrentState(state, currentState);
+
 		currentState = stateRepository.save(currentState);
 
 		return currentState;
