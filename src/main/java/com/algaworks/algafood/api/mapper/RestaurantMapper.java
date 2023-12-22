@@ -1,9 +1,11 @@
 package com.algaworks.algafood.api.mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.algaworks.algafood.api.model.request.RestaurantRequest;
 import com.algaworks.algafood.api.model.response.RestaurantResponse;
+import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 
@@ -23,6 +25,8 @@ public class RestaurantMapper {
 
 	public void copyRestaurantRequestForRestaurant(RestaurantRequest restaurantRequest, Restaurant restaurant) {
 		restaurant.setKitchen(new Kitchen());
+		Optional.ofNullable(restaurant.getAddress())
+				.ifPresent(address -> address.setCity(new City()));
 		modelMapper.map(restaurantRequest, restaurant);
 	}
 

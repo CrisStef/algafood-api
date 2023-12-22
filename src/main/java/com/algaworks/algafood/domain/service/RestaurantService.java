@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.model.request.RestaurantRequest;
 import com.algaworks.algafood.api.model.response.RestaurantResponse;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.exception.ValidatorException;
+import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
@@ -27,6 +28,9 @@ public class RestaurantService {
 
 	@Autowired
 	private KitchenService kitchenService;
+
+	@Autowired
+	private CityService cityService;
 
 	@Autowired
 	private SmartValidator validator;
@@ -66,7 +70,11 @@ public class RestaurantService {
 		Long kitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(kitchenId);
 
+		Long addressCityId = restaurant.getAddress().getCity().getId();
+		City city = cityService.findById(addressCityId);
+
 		restaurant.setKitchen(kitchen);
+		restaurant.getAddress().setCity(city);
 
 		return restaurantRepository.save(restaurant);
 	}
@@ -100,10 +108,13 @@ public class RestaurantService {
         restaurantMapper.copyRestaurantRequestForRestaurant(restaurantRequest, currentRestaurant);
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
-
 		Kitchen kitchen = kitchenService.findById(kitchenId);
 
+		Long addressCityId = restaurantRequest.getAddress().getCity().getId();
+		City city = cityService.findById(addressCityId);
+
 		currentRestaurant.setKitchen(kitchen);
+		currentRestaurant.getAddress().setCity(city);
 
 		return restaurantRepository.save(currentRestaurant);
 	}
