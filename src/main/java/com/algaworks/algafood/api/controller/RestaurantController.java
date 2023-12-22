@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import com.algaworks.algafood.api.model.request.RestaurantRequest;
 import com.algaworks.algafood.api.model.response.RestaurantResponse;
 import com.algaworks.algafood.domain.exception.BusinessException;
+import com.algaworks.algafood.domain.exception.CityNotFoundException;
 import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
@@ -50,7 +51,7 @@ public class RestaurantController {
 	public RestaurantResponse create(@RequestBody @Valid RestaurantRequest restaurant) {
 		try {
 			return restaurantService.create(restaurant);
-		} catch (KitchenNotFoundException e) {
+		} catch (KitchenNotFoundException | CityNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
@@ -59,7 +60,7 @@ public class RestaurantController {
 	public RestaurantResponse alter(@RequestBody Map<String, Object> fields, @PathVariable("restaurant_id") Long id, HttpServletRequest request) {
 		try {
 			return restaurantService.alter(fields, id, request);
-		} catch (KitchenNotFoundException e) {
+		} catch (KitchenNotFoundException | CityNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}

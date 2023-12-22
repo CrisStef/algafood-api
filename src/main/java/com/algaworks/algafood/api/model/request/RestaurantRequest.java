@@ -26,4 +26,8 @@ public class RestaurantRequest {
 	@Valid
 	@NotNull
 	private RestaurantKitchenRequest kitchen;
+
+	@Valid
+	@NotNull
+	private AddressRequest address;
 }
