@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PaymentRequest {
+public class ClusterRequest {
 	@NotBlank
-	private String description;
+	private String name;
 }
