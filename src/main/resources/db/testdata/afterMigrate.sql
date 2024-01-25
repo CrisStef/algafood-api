@@ -60,3 +60,9 @@ INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES
 INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES (7, 'T-Bone', 'Corte muito saboroso, sendo de um lado o contrafilé e do outro o filé mignon', 89, 1, 4);
 INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES (8, 'Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
 INSERT INTO product (id, name, description, price, active, restaurant_id) VALUES (9, 'Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
+
+
+INSERT INTO cluster (id, name) VALUES (1, 'Gerente');
+INSERT INTO cluster (id, name) VALUES (2, 'Vendedor');
+INSERT INTO cluster (id, name) VALUES (3, 'Secretária');
+INSERT INTO cluster (id, name) VALUES (4, 'Cadastrador');
