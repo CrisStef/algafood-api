@@ -66,3 +66,9 @@ INSERT INTO cluster (id, name) VALUES (1, 'Gerente');
 INSERT INTO cluster (id, name) VALUES (2, 'Vendedor');
 INSERT INTO cluster (id, name) VALUES (3, 'Secretária');
 INSERT INTO cluster (id, name) VALUES (4, 'Cadastrador');
+
+
+INSERT INTO user (id, name, email, password, registration_date) VALUES (1, 'Harry Potter', 'harry_potter@gmail.com', '123', utc_timestamp);
+INSERT INTO user (id, name, email, password, registration_date) VALUES (2, 'Katniss Everdeen', 'katniss_everdeen@gmail.com', '123', utc_timestamp);
+INSERT INTO user (id, name, email, password, registration_date) VALUES (3, 'Percy Jackson', 'percy_jackson@gmail.com', '123', utc_timestamp);
+INSERT INTO user (id, name, email, password, registration_date) VALUES (4, 'Jacob Black', 'jacob_black@gmail.com', '123', utc_timestamp);
