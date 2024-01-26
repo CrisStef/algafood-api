@@ -34,7 +34,7 @@ public class User {
 	private String email;
 
 	@Column(nullable = false)
-	private String senha;
+	private String password;
 
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
@@ -45,4 +45,12 @@ public class User {
 				joinColumns = @JoinColumn(name = "user_id"),
 				inverseJoinColumns = @JoinColumn(name = "cluster_id"))
 	private List<Cluster> clusters = new ArrayList<>();
+
+	public boolean validPassword(String password) {
+		return this.getPassword().equals(password);
+	}
+
+	public boolean invalidPassword(String password) {
+		return !validPassword(password);
+	}
 }
