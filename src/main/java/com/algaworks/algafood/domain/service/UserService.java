@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -68,6 +69,14 @@ public class UserService {
 
 	@Transactional
 	private User save(User user) {
+		userRepository.detach(user);
+		Optional<User> userExists = userRepository.findByEmail(user.getEmail());
+
+		if (userExists.isPresent() && !userExists.get().equals(user)) {
+			throw new BusinessException(
+				String.format("There is already a registered user with email %s", user.getEmail()));
+		}
+
 		return userRepository.save(user);
 	}
 
@@ -77,9 +86,7 @@ public class UserService {
 
 		userMapper.copyUserForCurrentUser(user, currentUser);
 
-		currentUser = userRepository.save(currentUser);
-
-		return currentUser;
+		return save(currentUser);
 	}
 
 	@Transactional
