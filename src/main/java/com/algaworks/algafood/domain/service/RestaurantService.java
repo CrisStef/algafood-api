@@ -93,7 +93,7 @@ public class RestaurantService {
 		restaurant.disable();
 	}
 
-	private Restaurant findById(Long id) {
+	public Restaurant findById(Long id) {
 		return restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
 	}
 

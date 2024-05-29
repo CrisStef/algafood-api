@@ -10,6 +10,7 @@ DELETE FROM product;
 DELETE FROM restaurant;
 DELETE FROM user;
 DELETE FROM cluster;
+DELETE FROM payment_restaurant;
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET SQL_SAFE_UPDATES = 1;
@@ -23,6 +24,7 @@ ALTER TABLE product auto_increment = 1;
 ALTER TABLE restaurant auto_increment = 1;
 ALTER TABLE user auto_increment = 1;
 ALTER TABLE cluster auto_increment = 1;
+ALTER TABLE payment_restaurant auto_increment = 1;
 
 INSERT INTO kitchen (id, name) VALUES (1, 'Tailandesa');
 INSERT INTO kitchen (id, name) VALUES (2, 'Indiana');
@@ -31,6 +33,7 @@ INSERT INTO kitchen (id, name) VALUES (4, 'Brasileira');
 
 INSERT INTO payment (id, description) VALUES (1, 'Cartão de Crédito');
 INSERT INTO payment (id, description) VALUES (2, 'Cartão de Débito');
+INSERT INTO payment (id, description) VALUES (3, 'Dinheiro');
 
 INSERT INTO permission (id, name, description) VALUES (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas');
 INSERT INTO permission (id, name, description) VALUES (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
