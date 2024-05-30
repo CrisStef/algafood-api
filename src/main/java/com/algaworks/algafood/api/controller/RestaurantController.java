@@ -109,4 +109,16 @@ public class RestaurantController {
 	public Restaurant findFirst() {
 		return restaurantService.findRestaurantFirst();
 	}
+
+	@PutMapping("/{restaurant_id}/open")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void openRestaurant(@PathVariable("restaurant_id") Long id) {
+		restaurantService.openRestaurant(id);
+	}
+
+	@PutMapping("/{restaurant_id}/closed")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void closedRestaurant(@PathVariable("restaurant_id") Long id) {
+		restaurantService.closedRestaurant(id);
+	}
 }

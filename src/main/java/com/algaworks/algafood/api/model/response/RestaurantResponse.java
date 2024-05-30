@@ -12,6 +12,7 @@ public class RestaurantResponse {
 	private String name;
 	private BigDecimal freightRate;
 	private Boolean status;
+	private Boolean open;
 
 	private RestaurantKitchenResponse kitchen;
 	private AddressResponse address;
