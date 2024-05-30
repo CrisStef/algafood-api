@@ -7,6 +7,7 @@ import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.exception.ValidatorException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
+import com.algaworks.algafood.domain.model.Payment;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.algafood.domain.util.MergeMapper;
@@ -33,6 +34,9 @@ public class RestaurantService {
 	private CityService cityService;
 
 	@Autowired
+	private PaymentService paymentService;
+
+	@Autowired
 	private SmartValidator validator;
 
 	@Autowired 
@@ -49,10 +53,10 @@ public class RestaurantService {
 	}
 
 	public RestaurantResponse alter(Map<String, Object> restaurantMap, Long id, HttpServletRequest request) {
-        RestaurantRequest restaurantRequest = new RestaurantRequest();
-        MergeMapper.merge(restaurantMap, restaurantRequest, request);
+		RestaurantRequest restaurantRequest = new RestaurantRequest();
+		MergeMapper.merge(restaurantMap, restaurantRequest, request);
 
-        validate(restaurantRequest, "restaurantRequest");
+		validate(restaurantRequest, "restaurantRequest");
 
 		return restaurantMapper.restaurantForRestaurantResponse(this.update(restaurantRequest, id, request));
 	}
@@ -105,7 +109,7 @@ public class RestaurantService {
 	private Restaurant update(RestaurantRequest restaurantRequest, Long id, HttpServletRequest request) {
 		Restaurant currentRestaurant = findById(id);
 
-        restaurantMapper.copyRestaurantRequestForRestaurant(restaurantRequest, currentRestaurant);
+		restaurantMapper.copyRestaurantRequestForRestaurant(restaurantRequest, currentRestaurant);
 
 		Long kitchenId = currentRestaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(kitchenId);
@@ -117,6 +121,22 @@ public class RestaurantService {
 		currentRestaurant.getAddress().setCity(city);
 
 		return restaurantRepository.save(currentRestaurant);
+	}
+
+	@Transactional
+	public void disassociateRestaurantPayment(Long restaurantId, Long paymentId) {
+		Restaurant restaurant = findById(restaurantId);
+		Payment payment = paymentService.findById(paymentId);
+
+		restaurant.removePayment(payment);
+	}
+
+	@Transactional
+	public void associateRestaurantPayment(Long restaurantId, Long paymentId) {
+		Restaurant restaurant = findById(restaurantId);
+		Payment payment = paymentService.findById(paymentId);
+
+		restaurant.addPayment(payment);
 	}
 
 	public List<Restaurant> findByFraightRate(BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
