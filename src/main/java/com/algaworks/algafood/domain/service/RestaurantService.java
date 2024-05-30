@@ -91,6 +91,20 @@ public class RestaurantService {
 	}
 
 	@Transactional
+	public void openRestaurant(Long id) {
+		Restaurant restaurant = this.findById(id);
+
+		restaurant.open();
+	}
+
+	@Transactional
+	public void closedRestaurant(Long id) {
+		Restaurant restaurant = this.findById(id);
+
+		restaurant.closed();
+	}
+
+	@Transactional
 	public void disableRestaurant(Long id) {
 		Restaurant restaurant = this.findById(id);
 

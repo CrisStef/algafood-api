@@ -50,6 +50,9 @@ public class Restaurant {
 	@Column(nullable = false)
 	private Boolean status = Boolean.TRUE;
 
+	@Column(nullable = false)
+	private Boolean open = Boolean.FALSE;
+
 	@Embedded
 	private Address address;
 
@@ -84,5 +87,13 @@ public class Restaurant {
 
 	public boolean addPayment(Payment payment) {
 		return getPayments().add(payment);
+	}
+
+	public void open() {
+		this.setOpen(Boolean.TRUE);
+	}
+
+	public void closed() {
+		this.setOpen(Boolean.FALSE);
 	}
 }
