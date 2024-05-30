@@ -10,4 +10,8 @@ public class ProductNotFoundException extends EntityNotFoundException {
 	public ProductNotFoundException(Long id) {
 		super(String.format("Product not found! Id: %d", id));
 	}
+
+	public ProductNotFoundException(Long productId, Long restaurantId) {
+		super(String.format("There is no product registration with code %s for the restaurant with code %s", productId, restaurantId));
+	}
 }
