@@ -13,6 +13,7 @@ import com.algaworks.algafood.api.model.response.UserResponse;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.UserNotFoundException;
+import com.algaworks.algafood.domain.model.Cluster;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.repository.UserRepository;
 
@@ -26,6 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private ClusterService clusterService;
 
 	private static final String MSG_STATE_IN_USE = "User (%d) in use and cannot be removed";
 
@@ -113,5 +117,21 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(String.format(MSG_STATE_IN_USE, id));
 		}
+	}
+
+	@Transactional
+	public void disassociateUserCluster(Long userId, Long clusterId) {
+		User user = this.findById(userId);
+		Cluster cluster = clusterService.findById(clusterId);
+
+		user.removeCluster(cluster);
+	}
+
+	@Transactional
+	public void associateUserCluster(Long userId, Long clusterId) {
+		User user = this.findById(userId);
+		Cluster cluster = clusterService.findById(clusterId);
+
+		user.addCluster(cluster);
 	}
 }

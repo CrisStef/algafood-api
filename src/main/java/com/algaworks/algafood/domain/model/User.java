@@ -1,8 +1,8 @@
 package com.algaworks.algafood.domain.model;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +44,7 @@ public class User {
 	@JoinTable(name = "cluster_user",
 				joinColumns = @JoinColumn(name = "user_id"),
 				inverseJoinColumns = @JoinColumn(name = "cluster_id"))
-	private List<Cluster> clusters = new ArrayList<>();
+	private Set<Cluster> clusters = new HashSet<>();
 
 	public boolean validPassword(String password) {
 		return this.getPassword().equals(password);
@@ -52,5 +52,13 @@ public class User {
 
 	public boolean invalidPassword(String password) {
 		return !validPassword(password);
+	}
+
+	public boolean removeCluster(Cluster cluster) {
+		return getClusters().remove(cluster);
+	}
+
+	public boolean addCluster(Cluster cluster) {
+		return getClusters().add(cluster);
 	}
 }

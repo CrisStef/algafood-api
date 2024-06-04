@@ -12,6 +12,7 @@ DELETE FROM user;
 DELETE FROM cluster;
 DELETE FROM payment_restaurant;
 DELETE FROM permission_cluster;
+DELETE FROM cluster_user;
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET SQL_SAFE_UPDATES = 1;
@@ -27,6 +28,7 @@ ALTER TABLE user auto_increment = 1;
 ALTER TABLE cluster auto_increment = 1;
 ALTER TABLE payment_restaurant auto_increment = 1;
 ALTER TABLE permission_cluster auto_increment = 1;
+ALTER TABLE cluster_user auto_increment = 1;
 
 INSERT INTO kitchen (id, name) VALUES (1, 'Tailandesa');
 INSERT INTO kitchen (id, name) VALUES (2, 'Indiana');
@@ -72,6 +74,7 @@ INSERT INTO cluster (id, name) VALUES (2, 'Vendedor');
 INSERT INTO cluster (id, name) VALUES (3, 'Secretária');
 INSERT INTO cluster (id, name) VALUES (4, 'Cadastrador');
 
+
 INSERT INTO permission_cluster (cluster_id, permission_id) VALUES(1, 1);
 INSERT INTO permission_cluster (cluster_id, permission_id) VALUES(1, 2);
 INSERT INTO permission_cluster (cluster_id, permission_id) VALUES(2, 1);
@@ -84,3 +87,11 @@ INSERT INTO user (id, name, email, password, registration_date) VALUES (1, 'Harr
 INSERT INTO user (id, name, email, password, registration_date) VALUES (2, 'Katniss Everdeen', 'katniss_everdeen@gmail.com', '123', utc_timestamp);
 INSERT INTO user (id, name, email, password, registration_date) VALUES (3, 'Percy Jackson', 'percy_jackson@gmail.com', '123', utc_timestamp);
 INSERT INTO user (id, name, email, password, registration_date) VALUES (4, 'Jacob Black', 'jacob_black@gmail.com', '123', utc_timestamp);
+
+
+INSERT INTO cluster_user (user_id, cluster_id) VALUES(1, 1);
+INSERT INTO cluster_user (user_id, cluster_id) VALUES(1, 4);
+INSERT INTO cluster_user (user_id, cluster_id) VALUES(2, 3);
+INSERT INTO cluster_user (user_id, cluster_id) VALUES(3, 2);
+INSERT INTO cluster_user (user_id, cluster_id) VALUES(3, 4);
+INSERT INTO cluster_user (user_id, cluster_id) VALUES(4, 2);

@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.algaworks.algafood.api.model.request.ClusterRequest;
@@ -28,7 +29,7 @@ public class ClusterMapper {
 		return modelMapper.map(cluster, ClusterResponse.class);
 	}
 
-	public List<ClusterResponse> clusterListForClusterListResponse(List<Cluster> cluster) {
+	public List<ClusterResponse> clusterListForClusterListResponse(Collection<Cluster> cluster) {
 		return modelMapper.map(cluster, new TypeToken<List<ClusterResponse>>(){}.getType());
 	}
 }

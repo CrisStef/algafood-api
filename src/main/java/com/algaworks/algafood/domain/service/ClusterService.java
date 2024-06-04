@@ -92,14 +92,14 @@ public class ClusterService {
 	}
 
 	@Transactional
-	public void disassociateRestaurantPermission(Long clusterId, Long permissionId) {
+	public void disassociateClusterPermission(Long clusterId, Long permissionId) {
 		Cluster cluster = this.findById(clusterId);
 		Permission permission = permissionService.findById(permissionId);
 		cluster.removePermission(permission);
 	}
 
 	@Transactional
-	public void associateRestaurantPermission(Long clusterId, Long permissionId) {
+	public void associateClusterPermission(Long clusterId, Long permissionId) {
 		Cluster cluster = this.findById(clusterId);
 		Permission permission = permissionService.findById(permissionId);
 		cluster.addPermission(permission);

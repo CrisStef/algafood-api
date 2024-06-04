@@ -36,12 +36,12 @@ public class ClusterPermissionController {
 	@DeleteMapping("/{permission_id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void disassociate(@PathVariable("cluster_id") Long clusterId, @PathVariable("permission_id") Long permissionId) {
-		clusterService.disassociateRestaurantPermission(clusterId, permissionId);
+		clusterService.disassociateClusterPermission(clusterId, permissionId);
 	}
 
 	@PutMapping("/{permission_id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void associate(@PathVariable("cluster_id") Long clusterId, @PathVariable("permission_id") Long permissionId) {
-		clusterService.associateRestaurantPermission(clusterId, permissionId);
+		clusterService.associateClusterPermission(clusterId, permissionId);
 	}
 }
