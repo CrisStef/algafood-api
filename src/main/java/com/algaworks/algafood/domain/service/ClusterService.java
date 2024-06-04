@@ -16,12 +16,16 @@ import com.algaworks.algafood.api.model.response.ClusterResponse;
 import com.algaworks.algafood.domain.exception.ClusterNotFoundException;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.model.Cluster;
+import com.algaworks.algafood.domain.model.Permission;
 import com.algaworks.algafood.domain.repository.ClusterRepository;
 
 @Service
 public class ClusterService {
 	@Autowired
 	private ClusterRepository clusterRepository;
+
+	@Autowired
+	private PermissionService permissionService;
 
 	private static final String MSG_CLUSTER_IN_USE = "Cluster (%d) in use and cannot be removed";
 
@@ -85,5 +89,19 @@ public class ClusterService {
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(String.format(MSG_CLUSTER_IN_USE, id));
 		}
+	}
+
+	@Transactional
+	public void disassociateClusterPermission(Long clusterId, Long permissionId) {
+		Cluster cluster = this.findById(clusterId);
+		Permission permission = permissionService.findById(permissionId);
+		cluster.removePermission(permission);
+	}
+
+	@Transactional
+	public void associateClusterPermission(Long clusterId, Long permissionId) {
+		Cluster cluster = this.findById(clusterId);
+		Permission permission = permissionService.findById(permissionId);
+		cluster.addPermission(permission);
 	}
 }

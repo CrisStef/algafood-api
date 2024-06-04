@@ -70,6 +70,12 @@ public class Restaurant {
 				inverseJoinColumns = @JoinColumn(name = "payment_id"))
 	private Set<Payment> payments = new HashSet<>();
 
+	@ManyToMany
+	@JoinTable(name = "user_restaurant",
+				joinColumns = @JoinColumn(name = "restaurant_id"), 
+				inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> users = new HashSet<>();
+
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 
