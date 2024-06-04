@@ -13,6 +13,7 @@ DELETE FROM cluster;
 DELETE FROM payment_restaurant;
 DELETE FROM permission_cluster;
 DELETE FROM cluster_user;
+DELETE FROM user_restaurant;
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET SQL_SAFE_UPDATES = 1;
@@ -29,6 +30,7 @@ ALTER TABLE cluster auto_increment = 1;
 ALTER TABLE payment_restaurant auto_increment = 1;
 ALTER TABLE permission_cluster auto_increment = 1;
 ALTER TABLE cluster_user auto_increment = 1;
+ALTER TABLE user_restaurant auto_increment = 1;
 
 INSERT INTO kitchen (id, name) VALUES (1, 'Tailandesa');
 INSERT INTO kitchen (id, name) VALUES (2, 'Indiana');
@@ -95,3 +97,13 @@ INSERT INTO cluster_user (user_id, cluster_id) VALUES(2, 3);
 INSERT INTO cluster_user (user_id, cluster_id) VALUES(3, 2);
 INSERT INTO cluster_user (user_id, cluster_id) VALUES(3, 4);
 INSERT INTO cluster_user (user_id, cluster_id) VALUES(4, 2);
+
+
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(1, 1);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(2, 1);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(1, 2);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(2, 2);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(6, 2);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(6, 3);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(4, 3);
+INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(5, 4);
