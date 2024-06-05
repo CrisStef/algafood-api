@@ -95,6 +95,14 @@ public class Restaurant {
 		return getPayments().add(payment);
 	}
 
+	public boolean removeUser(User user) {
+		return getUsers().remove(user);
+	}
+
+	public boolean addUser(User user) {
+		return getUsers().add(user);
+	}
+
 	public void open() {
 		this.setOpen(Boolean.TRUE);
 	}
