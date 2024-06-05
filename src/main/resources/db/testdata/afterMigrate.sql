@@ -14,6 +14,8 @@ DELETE FROM payment_restaurant;
 DELETE FROM permission_cluster;
 DELETE FROM cluster_user;
 DELETE FROM user_restaurant;
+DELETE FROM sale_order;
+DELETE FROM sale_order_item;
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET SQL_SAFE_UPDATES = 1;
@@ -31,6 +33,8 @@ ALTER TABLE payment_restaurant auto_increment = 1;
 ALTER TABLE permission_cluster auto_increment = 1;
 ALTER TABLE cluster_user auto_increment = 1;
 ALTER TABLE user_restaurant auto_increment = 1;
+ALTER TABLE sale_order auto_increment = 1;
+ALTER TABLE sale_order_item auto_increment = 1;
 
 INSERT INTO kitchen (id, name) VALUES (1, 'Tailandesa');
 INSERT INTO kitchen (id, name) VALUES (2, 'Indiana');
@@ -107,3 +111,22 @@ INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(6, 2);
 INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(6, 3);
 INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(4, 3);
 INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(5, 4);
+
+
+INSERT INTO sale_order
+(id, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
+VALUES(1, NULL, utc_timestamp, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CRIADO', 52.50, 62.50, 1, 1, 1, 1);
+INSERT INTO sale_order
+(id, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
+VALUES(2, NULL, utc_timestamp, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CRIADO', 52.50, 62.50, 2, 1, 2, 2);
+
+
+INSERT INTO sale_order_item
+(id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
+VALUES(1, 'Sem tomate', 1, 42.50, 21.25, 1, 1);
+INSERT INTO sale_order_item
+(id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
+VALUES(2, '', 1, 42.50, 21.25, 3, 1);
+INSERT INTO sale_order_item
+(id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
+VALUES(3, 'Sem queijo', 2, 42.50, 21.25, 2, 2);

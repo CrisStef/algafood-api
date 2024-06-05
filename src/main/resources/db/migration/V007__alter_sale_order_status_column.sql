@@ -1,0 +1,2 @@
+ALTER TABLE sale_order 
+	MODIFY COLUMN status VARCHAR(45) NOT NULL;

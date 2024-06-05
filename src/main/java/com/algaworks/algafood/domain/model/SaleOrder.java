@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,8 +39,8 @@ public class SaleOrder {
 	@Column(name = "freight_rate", nullable = false)
 	private BigDecimal freightRate;
 
-	@Column(nullable = false)
-	private BigDecimal total_value;
+	@Column(name = "total_value", nullable = false)
+	private BigDecimal totalValue;
 
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
@@ -61,7 +63,8 @@ public class SaleOrder {
 	private Payment payment;
 
 	@Column(name = "status", nullable = false)
-	private SaleOrderStatus saleOrderStatus;
+	@Enumerated(EnumType.STRING)
+	private SaleOrderStatus saleOrderStatus = SaleOrderStatus.CRIADO;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)

@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -33,7 +34,7 @@ public class UserMapper {
 		return modelMapper.map(user, UserResponse.class);
 	}
 
-	public List<UserResponse> userListForUserListResponse(List<User> user) {
+	public List<UserResponse> userListForUserListResponse(Collection<User> user) {
 		return modelMapper.map(user, new TypeToken<List<UserResponse>>(){}.getType());
 	}
 }

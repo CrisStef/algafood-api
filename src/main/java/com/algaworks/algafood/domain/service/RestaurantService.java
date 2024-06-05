@@ -9,6 +9,7 @@ import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Payment;
 import com.algaworks.algafood.domain.model.Restaurant;
+import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.algafood.domain.util.MergeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class RestaurantService {
 
 	@Autowired
 	private PaymentService paymentService;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private SmartValidator validator;
@@ -91,6 +95,23 @@ public class RestaurantService {
 	}
 
 	@Transactional
+	public void activationsRestaurants(List<Long> restaurantIds) {
+		restaurantIds.forEach(this::activateRestaurant);
+	}
+
+	@Transactional
+	public void disableRestaurant(Long id) {
+		Restaurant restaurant = this.findById(id);
+
+		restaurant.disable();
+	}
+
+	@Transactional
+	public void disablesRestaurants(List<Long> restaurantIds) {
+		restaurantIds.forEach(this::disableRestaurant);
+	}
+
+	@Transactional
 	public void openRestaurant(Long id) {
 		Restaurant restaurant = this.findById(id);
 
@@ -102,13 +123,6 @@ public class RestaurantService {
 		Restaurant restaurant = this.findById(id);
 
 		restaurant.closed();
-	}
-
-	@Transactional
-	public void disableRestaurant(Long id) {
-		Restaurant restaurant = this.findById(id);
-
-		restaurant.disable();
 	}
 
 	public Restaurant findById(Long id) {
@@ -151,6 +165,22 @@ public class RestaurantService {
 		Payment payment = paymentService.findById(paymentId);
 
 		restaurant.addPayment(payment);
+	}
+
+	@Transactional
+	public void disassociateRestaurantUser(Long restaurantId, Long userId) {
+		Restaurant restaurant = findById(restaurantId);
+		User user = userService.findById(userId);
+
+		restaurant.removeUser(user);
+	}
+
+	@Transactional
+	public void associateRestaurantUser(Long restaurantId, Long userId) {
+		Restaurant restaurant = findById(restaurantId);
+		User user = userService.findById(userId);
+
+		restaurant.addUser(user);
 	}
 
 	public List<Restaurant> findByFraightRate(BigDecimal initialFraightRate, BigDecimal finalFraightRate) {
