@@ -95,6 +95,23 @@ public class RestaurantService {
 	}
 
 	@Transactional
+	public void activationsRestaurants(List<Long> restaurantIds) {
+		restaurantIds.forEach(this::activateRestaurant);
+	}
+
+	@Transactional
+	public void disableRestaurant(Long id) {
+		Restaurant restaurant = this.findById(id);
+
+		restaurant.disable();
+	}
+
+	@Transactional
+	public void disablesRestaurants(List<Long> restaurantIds) {
+		restaurantIds.forEach(this::disableRestaurant);
+	}
+
+	@Transactional
 	public void openRestaurant(Long id) {
 		Restaurant restaurant = this.findById(id);
 
@@ -106,13 +123,6 @@ public class RestaurantService {
 		Restaurant restaurant = this.findById(id);
 
 		restaurant.closed();
-	}
-
-	@Transactional
-	public void disableRestaurant(Long id) {
-		Restaurant restaurant = this.findById(id);
-
-		restaurant.disable();
 	}
 
 	public Restaurant findById(Long id) {

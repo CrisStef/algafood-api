@@ -12,6 +12,7 @@ import com.algaworks.algafood.api.model.response.RestaurantResponse;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.CityNotFoundException;
 import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
+import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
@@ -68,21 +69,13 @@ public class RestaurantController {
 	@PutMapping("/{restaurant_id}/activate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void activateRestaurant(@PathVariable("restaurant_id") Long id) {
-		try {
-			restaurantService.activateRestaurant(id);
-		} catch (KitchenNotFoundException e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		restaurantService.activateRestaurant(id);
 	}
 
 	@DeleteMapping("/{restaurant_id}/activate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void disableRestaurant(@PathVariable("restaurant_id") Long id) {
-		try {
-			restaurantService.disableRestaurant(id);
-		} catch (KitchenNotFoundException e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
+		restaurantService.disableRestaurant(id);
 	}
 
 	@GetMapping("/find-by-name")
@@ -120,5 +113,25 @@ public class RestaurantController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void closedRestaurant(@PathVariable("restaurant_id") Long id) {
 		restaurantService.closedRestaurant(id);
+	}
+
+	@PutMapping("/activations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void activationsRestaurants(@RequestBody List<Long> ids) {
+		try {
+			restaurantService.activationsRestaurants(ids);
+		} catch (RestaurantNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+
+	@DeleteMapping("/disables")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void disablesRestaurants(@RequestBody List<Long> id) {
+		try {
+			restaurantService.disablesRestaurants(id);
+		} catch (RestaurantNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 }
