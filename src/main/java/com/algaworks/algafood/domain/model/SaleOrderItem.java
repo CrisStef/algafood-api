@@ -23,13 +23,13 @@ public class SaleOrderItem {
 	private Long id;
 
 	@Column(name = "unit_price", nullable = false)
-	private BigDecimal unit_price;
+	private BigDecimal unitPrice;
 
 	@Column(nullable = false)
 	private Integer quantity;
 
 	@Column(nullable = false)
-	private BigDecimal total_price;
+	private BigDecimal totalPrice;
 
 	private String observation;
 
