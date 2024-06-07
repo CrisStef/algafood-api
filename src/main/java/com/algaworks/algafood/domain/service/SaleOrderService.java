@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.algaworks.algafood.api.mapper.SaleOrderMapper;
+import com.algaworks.algafood.api.model.response.SaleOrderListResponse;
 import com.algaworks.algafood.api.model.response.SaleOrderResponse;
 import com.algaworks.algafood.domain.exception.SaleOrderNotFoundException;
 import com.algaworks.algafood.domain.model.SaleOrder;
@@ -19,7 +20,7 @@ public class SaleOrderService {
 	@Autowired
 	private SaleOrderMapper saleOrderMapper;
 
-	public List<SaleOrderResponse> findAll() {
+	public List<SaleOrderListResponse> findAll() {
 		return saleOrderMapper.saleOrderListForSaleOrderListResponse(this.listAll());
 	}
 	
