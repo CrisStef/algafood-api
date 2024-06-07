@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -75,6 +76,16 @@ public class SaleOrder {
 	@JoinColumn(name = "user_customer_id", nullable = false)
 	private User customer;
 
-	@OneToMany(mappedBy = "saleOrder")
+	@OneToMany(mappedBy = "saleOrder", cascade = CascadeType.ALL)
 	private List<SaleOrderItem> itens = new ArrayList<>();
+
+	public void calculateTotalValue() {
+		getItens().forEach(SaleOrderItem::calculatePriceTotal);
+		
+		this.subtotal = getItens().stream()
+			.map(item -> item.getTotalPrice())
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		this.totalValue = this.subtotal.add(this.freightRate);
+	}
 }
