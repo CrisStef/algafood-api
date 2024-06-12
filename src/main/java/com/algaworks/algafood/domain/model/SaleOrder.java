@@ -66,7 +66,7 @@ public class SaleOrder {
 
 	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private SaleOrderStatus saleOrderStatus = SaleOrderStatus.CRIADO;
+	private SaleOrderStatus saleOrderStatus = SaleOrderStatus.CREATED;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
@@ -81,11 +81,26 @@ public class SaleOrder {
 
 	public void calculateTotalValue() {
 		getItens().forEach(SaleOrderItem::calculatePriceTotal);
-		
+
 		this.subtotal = getItens().stream()
 			.map(item -> item.getTotalPrice())
 			.reduce(BigDecimal.ZERO, BigDecimal::add);
-		
+
 		this.totalValue = this.subtotal.add(this.freightRate);
+	}
+
+	public void confirmation() {
+		this.setSaleOrderStatus(SaleOrderStatus.CONFIRMED);
+		this.setConfirmationDate(OffsetDateTime.now());
+	}
+
+	public void delivered() {
+		this.setSaleOrderStatus(SaleOrderStatus.DELIVERED);
+		this.setDeliveryDate(OffsetDateTime.now());
+	}
+
+	public void canceled() {
+		this.setSaleOrderStatus(SaleOrderStatus.CANCELED);
+		this.setCancellationDate(OffsetDateTime.now());
 	}
 }

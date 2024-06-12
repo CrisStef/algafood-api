@@ -1,6 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.api.mapper.SaleOrderMapper;
-import com.algaworks.algafood.api.model.request.PaymentIdRequest;
 import com.algaworks.algafood.api.model.request.SaleOrderRequest;
 import com.algaworks.algafood.api.model.response.SaleOrderListResponse;
 import com.algaworks.algafood.api.model.response.SaleOrderResponse;
@@ -60,10 +58,21 @@ public class SaleOrderService {
 		City city = cityService.findById(saleOrder.getDeliveryAddress().getCity().getId());
 
 		saleOrder.setCustomer(userService.findById(1L));//TODO: melhoria com autenticacao
+		saleOrder.setRestaurant(restaurant);
 		saleOrder.setFreightRate(restaurant.getFreightRate());
-		saleOrder.setPayment(this.validRestaurantPayment(restaurant.getPayments(), saleOrderRequest.getPayment()));
-		saleOrder.getDeliveryAddress().setCity(city);;
+		this.validRestaurantPayment(saleOrder);
+		saleOrder.getDeliveryAddress().setCity(city);
 
+		this.validSaleOrderItens(saleOrder, restaurant);
+
+		saleOrder.calculateTotalValue();
+
+		this.save(saleOrder);
+
+		return saleOrderMapper.saleOrderForSaleOrderResponse(saleOrder);
+	}
+
+	private void validSaleOrderItens(SaleOrder saleOrder, Restaurant restaurant) {
 		saleOrder.getItens().stream().forEach(item -> {
 			Product product = productService.findById(item.getProduct().getId());
 
@@ -75,22 +84,16 @@ public class SaleOrderService {
 			item.setSaleOrder(saleOrder);
 			item.setUnitPrice(product.getPrice());
 		});
-
-		saleOrder.calculateTotalValue();
-
-		this.save(saleOrder);
-
-		return saleOrderMapper.saleOrderForSaleOrderResponse(saleOrder);
 	}
 
-	private Payment validRestaurantPayment(Collection<Payment> paymentsRestaurant, PaymentIdRequest paymentRequest) {
-		Payment payment = paymentService.findById(paymentRequest.getId());
+	private void validRestaurantPayment(SaleOrder saleOrder) {
+		Payment payment = paymentService.findById(saleOrder.getPayment().getId());
 
-		if (!paymentsRestaurant.contains(payment)) {
-			throw new PaymentNotFoundException(String.format("This payment '%s' not accepted by this restaurant.", payment));
+		if (!saleOrder.getRestaurant().getPayments().contains(payment)) {
+			throw new PaymentNotFoundException(String.format("This payment '%s' not accepted by this restaurant.", payment.getDescription()));
 		}
 
-		return payment;
+		saleOrder.setPayment(payment);
 	}
 
 	@Transactional

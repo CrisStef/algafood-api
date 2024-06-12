@@ -115,10 +115,10 @@ INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(5, 4);
 
 INSERT INTO sale_order
 (id, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
-VALUES(1, NULL, utc_timestamp, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CRIADO', 52.50, 62.50, 1, 1, 1, 1);
+VALUES(1, NULL, NULL, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CREATED', 52.50, 62.50, 1, 1, 1, 1);
 INSERT INTO sale_order
 (id, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
-VALUES(2, NULL, utc_timestamp, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CRIADO', 52.50, 62.50, 2, 1, 2, 2);
+VALUES(2, NULL, NULL, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CREATED', 52.50, 62.50, 2, 1, 2, 2);
 
 
 INSERT INTO sale_order_item
