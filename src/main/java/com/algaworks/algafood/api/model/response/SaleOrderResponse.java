@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SaleOrderResponse {
-	private Long id;
+	private String code;
 	private BigDecimal subtotal;
 	private BigDecimal freightRate;
 	private BigDecimal totalValue;

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +19,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
+import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.model.enums.SaleOrderStatus;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,6 +37,9 @@ public class SaleOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false)
+	private String code;
 
 	@Column(nullable = false)
 	private BigDecimal subtotal;
@@ -102,5 +108,20 @@ public class SaleOrder {
 	public void canceled() {
 		this.setSaleOrderStatus(SaleOrderStatus.CANCELED);
 		this.setCancellationDate(OffsetDateTime.now());
+	}
+
+	private void setSaleOrderStatus(SaleOrderStatus newStatus) {
+		if (getSaleOrderStatus().validateStatusChange(newStatus)) {
+			throw new BusinessException(
+				String.format("Sale order status %s cannot be changed from %s to %s",
+							  this.getCode(), this.getSaleOrderStatus().getDescription(), newStatus.getDescription()));
+		}
+
+		this.saleOrderStatus = newStatus;
+	}
+
+	@PrePersist
+	private void generateCode() {
+		setCode(UUID.randomUUID().toString());
 	}
 }
