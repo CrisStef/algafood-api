@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.model.enums.SaleOrderStatus;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -102,5 +103,15 @@ public class SaleOrder {
 	public void canceled() {
 		this.setSaleOrderStatus(SaleOrderStatus.CANCELED);
 		this.setCancellationDate(OffsetDateTime.now());
+	}
+
+	private void setSaleOrderStatus(SaleOrderStatus newStatus) {
+		if (getSaleOrderStatus().validateStatusChange(newStatus)) {
+			throw new BusinessException(
+				String.format("Sale order status %s cannot be changed from %s to %s",
+							  this.getId(), this.getSaleOrderStatus().getDescription(), newStatus.getDescription()));
+		}
+
+		this.saleOrderStatus = newStatus;
 	}
 }
