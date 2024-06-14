@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.domain.service.SaleOrderManagementService;
 
 @RestController
-@RequestMapping("/saleOrders/{sale_order_id}")
+@RequestMapping("/saleOrders/{sale_order_code}")
 public class SaleOrderManagementController {
 	@Autowired
 	private SaleOrderManagementService saleOrderManagementService;
 
 	@PutMapping("/confirmation")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmationSaleOrder(@PathVariable("sale_order_id") Long saleOrderId) {
-		saleOrderManagementService.confirmationSaleOrder(saleOrderId);
+	public void confirmationSaleOrder(@PathVariable("sale_order_code") String saleOrderCode) {
+		saleOrderManagementService.confirmationSaleOrder(saleOrderCode);
 	}
 
 	@PutMapping("/delivery")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deliverySaleOrder(@PathVariable("sale_order_id") Long saleOrderId) {
-		saleOrderManagementService.deliverySaleOrder(saleOrderId);
+	public void deliverySaleOrder(@PathVariable("sale_order_code") String saleOrderCode) {
+		saleOrderManagementService.deliverySaleOrder(saleOrderCode);
 	}
 
 	@PutMapping("/cancellation")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancellationSaleOrder(@PathVariable("sale_order_id") Long saleOrderId) {
-		saleOrderManagementService.cancellationSaleOrder(saleOrderId);
+	public void cancellationSaleOrder(@PathVariable("sale_order_code") String saleOrderCode) {
+		saleOrderManagementService.cancellationSaleOrder(saleOrderCode);
 	}
 }

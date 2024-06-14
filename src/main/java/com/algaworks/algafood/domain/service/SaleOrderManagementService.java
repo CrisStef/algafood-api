@@ -12,22 +12,22 @@ public class SaleOrderManagementService {
 	private SaleOrderService saleOrderService;
 
 	@Transactional
-	public void confirmationSaleOrder(Long saleOrderId) {
-		SaleOrder saleOrder = saleOrderService.findById(saleOrderId);
+	public void confirmationSaleOrder(String saleOrderCode) {
+		SaleOrder saleOrder = saleOrderService.findByCode(saleOrderCode);
 
 		saleOrder.confirmation();
 	}
 
 	@Transactional
-	public void deliverySaleOrder(Long saleOrderId) {
-		SaleOrder saleOrder = saleOrderService.findById(saleOrderId);
+	public void deliverySaleOrder(String saleOrderCode) {
+		SaleOrder saleOrder = saleOrderService.findByCode(saleOrderCode);
 
 		saleOrder.delivered();
 	}
 
 	@Transactional
-	public void cancellationSaleOrder(Long saleOrderId) {
-		SaleOrder saleOrder = saleOrderService.findById(saleOrderId);
+	public void cancellationSaleOrder(String saleOrderCode) {
+		SaleOrder saleOrder = saleOrderService.findByCode(saleOrderCode);
 
 		saleOrder.canceled();
 	}

@@ -32,9 +32,9 @@ public class SaleOrderController {
 		return saleOrderService.findAll();
 	}
 
-	@GetMapping("/{sale_order_id}")
-	public SaleOrderResponse getById(@PathVariable("sale_order_id") Long saleOrderId) {
-		return saleOrderService.getById(saleOrderId);
+	@GetMapping("/{sale_order_code}")
+	public SaleOrderResponse getById(@PathVariable("sale_order_code") String saleOrderCode) {
+		return saleOrderService.getByCode(saleOrderCode);
 	}
 
 	@PostMapping

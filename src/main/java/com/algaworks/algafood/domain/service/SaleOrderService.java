@@ -46,9 +46,9 @@ public class SaleOrderService {
 	public List<SaleOrderListResponse> findAll() {
 		return saleOrderMapper.saleOrderListForSaleOrderListResponse(this.listAll());
 	}
-	
-	public SaleOrderResponse getById(Long id) {
-		return saleOrderMapper.saleOrderForSaleOrderResponse(this.findById(id));
+
+	public SaleOrderResponse getByCode(String code) {
+		return saleOrderMapper.saleOrderForSaleOrderResponse(this.findByCode(code));
 	}
 
 	@Transactional
@@ -105,9 +105,9 @@ public class SaleOrderService {
 		return saleOrderRepository.findAll();
 	}
 
-	public SaleOrder findById(Long id) {
-		SaleOrder saleOrder = saleOrderRepository.findById(id)
-							.orElseThrow(() -> new SaleOrderNotFoundException(id));
+	public SaleOrder findByCode(String code) {
+		SaleOrder saleOrder = saleOrderRepository.findByCode(code)
+							.orElseThrow(() -> new SaleOrderNotFoundException(code));
 
 		return saleOrder;
 	}
