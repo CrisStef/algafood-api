@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.algaworks.algafood.api.model.request.RestaurantRequest;
 import com.algaworks.algafood.api.model.response.RestaurantResponse;
+import com.algaworks.algafood.api.model.view.RestaurantView;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.CityNotFoundException;
 import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
@@ -18,6 +19,7 @@ import com.algaworks.algafood.domain.service.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +38,26 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
 
+	// @GetMapping
+	// public List<RestaurantResponse> findAll() {
+	// 	return restaurantService.findAll();
+	// }
+
 	@GetMapping
-	public List<RestaurantResponse> findAll() {
-		return restaurantService.findAll();
+	public MappingJacksonValue findAll(@RequestParam(required = false) String projection) {
+		List<RestaurantResponse> restaurantResponse = restaurantService.findAll();
+
+		MappingJacksonValue restaurantWrapper = new MappingJacksonValue(restaurantResponse);
+
+		restaurantWrapper.setSerializationView(RestaurantView.RestauranteSummary.class);
+
+		if ("name-only".equals(projection)) {
+			restaurantWrapper.setSerializationView(RestaurantView.NameOnly.class);
+		} else if ("all".equals(projection)) {
+			restaurantWrapper.setSerializationView(null);
+		}
+
+		return restaurantWrapper;
 	}
 
 	@GetMapping("/{restaurant_id}")
