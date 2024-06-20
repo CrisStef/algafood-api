@@ -8,6 +8,7 @@ import com.algaworks.algafood.domain.model.enums.SaleOrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 public class SaleOrderListResponse {

@@ -7,15 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.algaworks.algafood.api.model.request.RestaurantRequest;
-import com.algaworks.algafood.api.model.response.RestaurantResponse;
-import com.algaworks.algafood.domain.exception.BusinessException;
-import com.algaworks.algafood.domain.exception.CityNotFoundException;
-import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
-import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
-import com.algaworks.algafood.domain.model.Restaurant;
-import com.algaworks.algafood.domain.service.RestaurantService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,14 +20,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.model.request.RestaurantRequest;
+import com.algaworks.algafood.api.model.response.RestaurantResponse;
+import com.algaworks.algafood.api.model.view.RestaurantView;
+import com.algaworks.algafood.domain.exception.BusinessException;
+import com.algaworks.algafood.domain.exception.CityNotFoundException;
+import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
+import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
+import com.algaworks.algafood.domain.model.Restaurant;
+import com.algaworks.algafood.domain.service.RestaurantService;
+import com.fasterxml.jackson.annotation.JsonView;
+
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
 
+	@JsonView(RestaurantView.RestauranteSummary.class)
 	@GetMapping
 	public List<RestaurantResponse> findAll() {
+		return restaurantService.findAll();
+	}
+
+	@JsonView(RestaurantView.NameOnly.class)
+	@GetMapping(params = "projection=name-only")
+	public List<RestaurantResponse> findAllNameOnly() {
 		return restaurantService.findAll();
 	}
 
