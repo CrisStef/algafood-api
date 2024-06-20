@@ -7,6 +7,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.algaworks.algafood.api.model.request.RestaurantRequest;
 import com.algaworks.algafood.api.model.response.RestaurantResponse;
 import com.algaworks.algafood.api.model.view.RestaurantView;
@@ -16,21 +29,7 @@ import com.algaworks.algafood.domain.exception.KitchenNotFoundException;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -38,26 +37,16 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
 
-	// @GetMapping
-	// public List<RestaurantResponse> findAll() {
-	// 	return restaurantService.findAll();
-	// }
-
+	@JsonView(RestaurantView.RestauranteSummary.class)
 	@GetMapping
-	public MappingJacksonValue findAll(@RequestParam(required = false) String projection) {
-		List<RestaurantResponse> restaurantResponse = restaurantService.findAll();
+	public List<RestaurantResponse> findAll() {
+		return restaurantService.findAll();
+	}
 
-		MappingJacksonValue restaurantWrapper = new MappingJacksonValue(restaurantResponse);
-
-		restaurantWrapper.setSerializationView(RestaurantView.RestauranteSummary.class);
-
-		if ("name-only".equals(projection)) {
-			restaurantWrapper.setSerializationView(RestaurantView.NameOnly.class);
-		} else if ("all".equals(projection)) {
-			restaurantWrapper.setSerializationView(null);
-		}
-
-		return restaurantWrapper;
+	@JsonView(RestaurantView.NameOnly.class)
+	@GetMapping(params = "projection=name-only")
+	public List<RestaurantResponse> findAllNameOnly() {
+		return restaurantService.findAll();
 	}
 
 	@GetMapping("/{restaurant_id}")
