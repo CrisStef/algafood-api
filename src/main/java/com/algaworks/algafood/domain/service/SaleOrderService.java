@@ -2,6 +2,8 @@ package com.algaworks.algafood.domain.service;
 
 import java.util.List;
 
+import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
+import com.algaworks.algafood.infrastructure.repository.spec.SaleOrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +45,8 @@ public class SaleOrderService {
 	@Autowired
 	private CityService cityService;
 
-	public List<SaleOrderListResponse> findAll() {
-		return saleOrderMapper.saleOrderListForSaleOrderListResponse(this.listAll());
+	public List<SaleOrderListResponse> findAllByFilter(SaleOrderFilter filter) {
+		return saleOrderMapper.saleOrderListForSaleOrderListResponse(this.listAllByFilter(filter));
 	}
 
 	public SaleOrderResponse getByCode(String code) {
@@ -101,8 +103,8 @@ public class SaleOrderService {
 		return saleOrderRepository.save(saleOrder);
 	}
 	
-	private List<SaleOrder> listAll() {
-		return saleOrderRepository.findAll();
+	private List<SaleOrder> listAllByFilter(SaleOrderFilter filter) {
+		return saleOrderRepository.findAll(SaleOrderSpecs.findAllSaleOrderByFilter(filter));
 	}
 
 	public SaleOrder findByCode(String code) {

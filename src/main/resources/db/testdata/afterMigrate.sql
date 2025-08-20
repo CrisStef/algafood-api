@@ -115,11 +115,16 @@ INSERT INTO user_restaurant (restaurant_id, user_id) VALUES(5, 4);
 
 INSERT INTO sale_order
 (id, code, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
-VALUES(1, 'fff1a995-f466-412b-af78-e8252804f58b', NULL, NULL, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CREATED', 52.50, 62.50, 1, 1, 1, 1);
+VALUES(1, 'fff1a995-f466-412b-af78-e8252804f58b', NULL, NULL, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, '2025-07-20 14:36:49', 'CREATED', 52.50, 62.50, 1, 1, 1, 1);
 INSERT INTO sale_order
 (id, code, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
-VALUES(2, '9a7ce8ac-f0bc-4bd3-b8f6-c427d9acae01', NULL, NULL, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, utc_timestamp, 'CREATED', 52.50, 62.50, 2, 1, 2, 2);
-
+VALUES(2, '9a7ce8ac-f0bc-4bd3-b8f6-c427d9acae01', NULL, NULL, 'Bloco 29', 'Rua João Pessoa', '19', 'Cabula', '38400-999', utc_timestamp, 10.00, '2025-08-15 14:36:00', 'CREATED', 52.50, 62.50, 2, 1, 2, 2);
+INSERT INTO sale_order
+(id, code, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
+VALUES(3, 'd1e2f3a4-b5c6-7d8e-9f01-234567890abc', NULL, NULL, 'Bloco 10', 'Centro', '45', 'Rua das Flores', '38400-777', utc_timestamp, 12.00, utc_timestamp, 'CREATED', 78.90, 90.90, 3, 2, 3, 3);
+INSERT INTO sale_order
+(id, code, cancellation_date, confirmation_date, address_complement, address_district, address_number, address_public_place, address_zip_code, delivery_date, freight_rate, registration_date, status, subtotal, total_value, user_customer_id, address_city_id, payment_id, restaurant_id)
+VALUES(4, 'a9b8c7d6-e5f4-3a2b-1c0d-987654321fed', NULL, NULL, 'Apartamento 202', 'Jardim América', '102', 'Av. Paulista', '38400-666', utc_timestamp, 15.00, utc_timestamp, 'CREATED', 110.00, 125.00, 4, 2, 1, 1);
 
 INSERT INTO sale_order_item
 (id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
@@ -130,3 +135,12 @@ VALUES(2, '', 1, 42.50, 21.25, 3, 1);
 INSERT INTO sale_order_item
 (id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
 VALUES(3, 'Sem queijo', 2, 42.50, 21.25, 2, 2);
+INSERT INTO sale_order_item
+(id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
+VALUES(4, '', 1, 78.90, 78.90, 3, 3);
+INSERT INTO sale_order_item
+(id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
+VALUES(5, 'Sem picles', 2, 110.00, 55.00, 2, 4);
+INSERT INTO sale_order_item
+(id, observation, quantity, total_price, unit_price, product_id, sale_order_id)
+VALUES(6, '', 1, 15.00, 15.00, 4, 4);

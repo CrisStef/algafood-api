@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,8 @@ public class SaleOrderController {
 	private SaleOrderService saleOrderService;
 
 	@GetMapping
-	public List<SaleOrderListResponse> findAll() {
-		return saleOrderService.findAll();
+	public List<SaleOrderListResponse> findAll(SaleOrderFilter filter) {
+		return saleOrderService.findAllByFilter(filter);
 	}
 
 	@GetMapping("/{sale_order_code}")
