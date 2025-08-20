@@ -12,6 +12,8 @@ import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.ProductRepository;
 
+import java.util.List;
+
 @Service
 public class ProductService {
 	@Autowired
@@ -73,5 +75,15 @@ public class ProductService {
 		productMapper.copyProductForCurrentProduct(product, currentProduct);
 
 		return productRepository.save(currentProduct);
+	}
+
+	public List<Product> listAllRestaurantProduct(Long restaurantId, boolean inative) {
+		Restaurant restaurant = restaurantService.findById(restaurantId);
+
+		if (inative) {
+			return restaurant.getProducts();
+		} else {
+			return productRepository.findActiveByRestaurant(restaurant);
+		}
 	}
 }

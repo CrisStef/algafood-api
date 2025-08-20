@@ -4,23 +4,18 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.domain.model.Product;
+import com.algaworks.algafood.domain.model.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.algaworks.algafood.api.mapper.ProductMapper;
 import com.algaworks.algafood.api.model.request.ProductRequest;
 import com.algaworks.algafood.api.model.response.ProductResponse;
-import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.ProductService;
 import com.algaworks.algafood.domain.service.RestaurantService;
+
 
 @RestController
 @RequestMapping("/restaurants/{restaurant_id}/products")
@@ -35,10 +30,11 @@ public class RestaurantProductController {
 	private ProductMapper productMapper;
 
 	@GetMapping
-	public List<ProductResponse> findAll(@PathVariable("restaurant_id") Long restaurantId) {
-		Restaurant restaurant = restaurantService.findById(restaurantId);
+	public List<ProductResponse> findAll(@PathVariable("restaurant_id") Long restaurantId,
+			@RequestParam(required = false) boolean inative) {
+		List<Product> productList = productService.listAllRestaurantProduct(restaurantId, inative);
 
-		return productMapper.productListForProductListResponse(restaurant.getProducts());
+		return productMapper.productListForProductListResponse(productList);
 	}
 
 	@GetMapping("/{product_id}")
