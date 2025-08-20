@@ -6,6 +6,8 @@ import javax.validation.Valid;
 
 import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +31,8 @@ public class SaleOrderController {
 	private SaleOrderService saleOrderService;
 
 	@GetMapping
-	public List<SaleOrderListResponse> findAll(SaleOrderFilter filter) {
-		return saleOrderService.findAllByFilter(filter);
+	public Page<SaleOrderListResponse> findAll(SaleOrderFilter filter, Pageable pageable) {
+		return saleOrderService.findAllByFilter(filter, pageable);
 	}
 
 	@GetMapping("/{sale_order_code}")

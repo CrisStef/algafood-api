@@ -15,6 +15,9 @@ import com.algaworks.algafood.domain.repository.KitchenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +45,12 @@ public class KitchenService {
 		return kitchenMapper.kitchenListForKitchenListResponse(this.findByName(name));
 	}
 
-	public List<KitchenResponse> findAll() {
-		return kitchenMapper.kitchenListForKitchenListResponse(this.listAll());
+	public Page<KitchenResponse> findAll(Pageable pageable) {
+		Page<Kitchen> kitchenPage = this.listAll(pageable);
+		List<KitchenResponse> kitchenList = kitchenMapper.kitchenListForKitchenListResponse(kitchenPage.getContent());
+		Page<KitchenResponse> kitchenPageResponse = new PageImpl<>(kitchenList, pageable, kitchenPage.getTotalElements());
+
+		return kitchenPageResponse;
 	}
 
 	public KitchenResponse alter(@Valid KitchenRequest kitchenRequest, Long id) {
@@ -69,8 +76,8 @@ public class KitchenService {
 		}
 	}
 
-	private List<Kitchen> listAll() {
-		return kitchenRepository.findAll();
+	private Page<Kitchen> listAll(Pageable pageable) {
+		return kitchenRepository.findAll(pageable);
 	}
 
 	public Kitchen findById(Long id) {

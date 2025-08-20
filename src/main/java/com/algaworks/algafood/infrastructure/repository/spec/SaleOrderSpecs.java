@@ -10,8 +10,10 @@ import java.util.ArrayList;
 public class SaleOrderSpecs {
 	public static Specification<SaleOrder> findAllSaleOrderByFilter(SaleOrderFilter saleOrderFilter) {
 		return (root, query, builder) -> {
-			root.fetch("restaurant").fetch("kitchen");
-			root.fetch("customer");
+			if (SaleOrder.class.equals(query.getResultType())) {
+				root.fetch("restaurant").fetch("kitchen");
+				root.fetch("customer");
+			}
 
 			var predicates = new ArrayList<Predicate>();
 

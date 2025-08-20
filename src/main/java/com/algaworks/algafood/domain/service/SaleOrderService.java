@@ -5,6 +5,9 @@ import java.util.List;
 import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
 import com.algaworks.algafood.infrastructure.repository.spec.SaleOrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +48,13 @@ public class SaleOrderService {
 	@Autowired
 	private CityService cityService;
 
-	public List<SaleOrderListResponse> findAllByFilter(SaleOrderFilter filter) {
-		return saleOrderMapper.saleOrderListForSaleOrderListResponse(this.listAllByFilter(filter));
+	public Page<SaleOrderListResponse> findAllByFilter(SaleOrderFilter filter, Pageable pageable) {
+		Page<SaleOrder> saleOrderPage = this.listAllByFilter(filter, pageable);
+		List<SaleOrderListResponse> saleOrderListResponse =
+				saleOrderMapper.saleOrderListForSaleOrderListResponse(saleOrderPage.getContent());
+		Page<SaleOrderListResponse> saleOrderPageResponse = new PageImpl<>(saleOrderListResponse, pageable, saleOrderPage.getTotalElements());
+
+		return saleOrderPageResponse;
 	}
 
 	public SaleOrderResponse getByCode(String code) {
@@ -103,8 +111,8 @@ public class SaleOrderService {
 		return saleOrderRepository.save(saleOrder);
 	}
 	
-	private List<SaleOrder> listAllByFilter(SaleOrderFilter filter) {
-		return saleOrderRepository.findAll(SaleOrderSpecs.findAllSaleOrderByFilter(filter));
+	private Page<SaleOrder> listAllByFilter(SaleOrderFilter filter, Pageable pageable) {
+		return saleOrderRepository.findAll(SaleOrderSpecs.findAllSaleOrderByFilter(filter), pageable);
 	}
 
 	public SaleOrder findByCode(String code) {

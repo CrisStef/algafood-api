@@ -9,6 +9,8 @@ import com.algaworks.algafood.api.model.response.KitchenResponse;
 import com.algaworks.algafood.domain.service.KitchenService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +29,8 @@ public class KitchenController {
 	private KitchenService kitchenService;
 
 	@GetMapping
-	public List<KitchenResponse> findAll() {
-		return kitchenService.findAll();
+	public Page<KitchenResponse> findAll(Pageable page) {
+		return kitchenService.findAll(page);
 	}
 
 	@GetMapping("/{kitchen_id}")
