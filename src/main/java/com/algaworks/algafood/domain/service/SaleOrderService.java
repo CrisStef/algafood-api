@@ -2,6 +2,7 @@ package com.algaworks.algafood.domain.service;
 
 import java.util.List;
 
+import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
 import com.algaworks.algafood.infrastructure.repository.spec.SaleOrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.model.SaleOrder;
 import com.algaworks.algafood.domain.repository.SaleOrderRepository;
+import com.google.common.collect.ImmutableMap;
 
 @Service
 public class SaleOrderService {
@@ -49,6 +51,7 @@ public class SaleOrderService {
 	private CityService cityService;
 
 	public Page<SaleOrderListResponse> findAllByFilter(SaleOrderFilter filter, Pageable pageable) {
+		pageable = traduzirPageable(pageable);
 		Page<SaleOrder> saleOrderPage = this.listAllByFilter(filter, pageable);
 		List<SaleOrderListResponse> saleOrderListResponse =
 				saleOrderMapper.saleOrderListForSaleOrderListResponse(saleOrderPage.getContent());
@@ -120,5 +123,16 @@ public class SaleOrderService {
 							.orElseThrow(() -> new SaleOrderNotFoundException(code));
 
 		return saleOrder;
+	}
+
+	private Pageable traduzirPageable(Pageable apiPageable) {
+		var mapeamento = ImmutableMap.of(
+				"code", "code",
+				"restaurant.name", "restaurant.name",
+				"customer.name", "customer.name",
+				"totalValue", "totalValue"
+		);
+
+		return PageableTranslator.translate(apiPageable, mapeamento);
 	}
 }
