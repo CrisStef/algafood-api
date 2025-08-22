@@ -1,4 +1,4 @@
-package com.algaworks.algafood.domain.util;
+package com.algaworks.algafood.domain.util.mapper;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -3,7 +3,7 @@ package com.algaworks.algafood.domain.service;
 import java.util.List;
 
 import com.algaworks.algafood.core.data.PageableTranslator;
-import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
+import com.algaworks.algafood.domain.filter.SaleOrderFilter;
 import com.algaworks.algafood.infrastructure.repository.spec.SaleOrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

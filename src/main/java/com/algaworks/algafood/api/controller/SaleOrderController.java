@@ -1,10 +1,8 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
-import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
+import com.algaworks.algafood.domain.filter.SaleOrderFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,7 +1,7 @@
 package com.algaworks.algafood.infrastructure.repository.spec;
 
 import com.algaworks.algafood.domain.model.SaleOrder;
-import com.algaworks.algafood.domain.repository.filter.SaleOrderFilter;
+import com.algaworks.algafood.domain.filter.SaleOrderFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
