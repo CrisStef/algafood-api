@@ -6,7 +6,6 @@ import com.algaworks.algafood.domain.model.dto.DailySale;
 import com.algaworks.algafood.domain.model.enums.SaleOrderStatus;
 import com.algaworks.algafood.domain.service.ISaleQueryService;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
