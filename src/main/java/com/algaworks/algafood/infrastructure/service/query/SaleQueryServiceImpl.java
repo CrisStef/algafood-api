@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastructure.service;
+package com.algaworks.algafood.infrastructure.service.query;
 
 import com.algaworks.algafood.domain.filter.DailySaleFilter;
 import com.algaworks.algafood.domain.model.SaleOrder;
