@@ -6,5 +6,5 @@ import com.algaworks.algafood.domain.model.dto.DailySale;
 import java.util.List;
 
 public interface ISaleQueryService {
-    List<DailySale> findDailySale(DailySaleFilter filter);
+    List<DailySale> findDailySale(DailySaleFilter filter, String timeOffset);
 }

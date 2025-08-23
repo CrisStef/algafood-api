@@ -19,14 +19,20 @@ public class SaleQueryServiceImpl implements ISaleQueryService {
     @PersistenceContext
     private EntityManager manager;
     @Override
-    public List<DailySale> findDailySale(DailySaleFilter filter) {
+    public List<DailySale> findDailySale(DailySaleFilter filter, String timeOffset) {
         var builder = manager.getCriteriaBuilder();
         var query = builder.createQuery(DailySale.class);
         var root = query.from(SaleOrder.class);
         List<Predicate> predicates = new ArrayList<>();
 
+        var functionConvertTzDataCriacao = builder.function(
+                "convert_tz", Date.class,
+                root.get("registrationDate"),
+                builder.literal("+00:00"),
+                builder.literal(timeOffset));
+
         var functionDateRegistrationDate = builder.function(
-                "date", Date.class, root.get("registrationDate"));
+                "date", Date.class, functionConvertTzDataCriacao);
 
         var selection = builder.construct(DailySale.class,
                 functionDateRegistrationDate,
