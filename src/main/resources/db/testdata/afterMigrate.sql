@@ -16,6 +16,7 @@ DELETE FROM cluster_user;
 DELETE FROM user_restaurant;
 DELETE FROM sale_order;
 DELETE FROM sale_order_item;
+DELETE FROM product_photo;
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET SQL_SAFE_UPDATES = 1;
