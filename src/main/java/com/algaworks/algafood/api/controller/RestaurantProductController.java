@@ -1,12 +1,13 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
 import com.algaworks.algafood.api.model.request.ProductPhotoRequest;
+import com.algaworks.algafood.api.model.response.ProductPhotoResponse;
 import com.algaworks.algafood.domain.model.Product;
+import com.algaworks.algafood.domain.service.ProductPhotoCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +18,6 @@ import com.algaworks.algafood.api.model.request.ProductRequest;
 import com.algaworks.algafood.api.model.response.ProductResponse;
 import com.algaworks.algafood.domain.service.ProductService;
 import com.algaworks.algafood.domain.service.RestaurantService;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -28,6 +28,9 @@ public class RestaurantProductController {
 
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private ProductPhotoCatalogService productPhotoCatalogService;
 
 	@Autowired
 	private ProductMapper productMapper;
@@ -57,11 +60,10 @@ public class RestaurantProductController {
 	}
 
 	@PutMapping(value = "/{product_id}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void getPhotoRestaurantProduct(
+	public ProductPhotoResponse createRestaurantProductPhoto(
 			@PathVariable("restaurant_id") Long restaurantId,
 			@PathVariable("product_id") Long productId,
 			@Valid ProductPhotoRequest photoRequest) {
-		var fileName = UUID.randomUUID().toString() + "_" + photoRequest.getFile().getName();
-		System.out.println(fileName);
+		return productPhotoCatalogService.createProductPhoto(photoRequest, restaurantId, productId);
 	}
 }
