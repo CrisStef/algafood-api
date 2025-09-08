@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class ProductPhotoCatalogService {
@@ -38,6 +39,16 @@ public class ProductPhotoCatalogService {
 
     @Transactional
     public ProductPhoto saveProductPhoto(ProductPhoto productPhoto) {
+        Long restaurantId = productPhoto.getRestaurantId();
+        Long productId = productPhoto.getProduct().getId();
+
+        Optional<ProductPhoto> existingPhoto =
+                productRepository.findPhotoById(restaurantId, productId);
+
+        if (existingPhoto.isPresent()) {
+            productRepository.delete(existingPhoto.get());
+        }
+
         return productRepository.save(productPhoto);
     }
 }
