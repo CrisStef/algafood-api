@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,6 +8,7 @@ import javax.validation.Valid;
 import com.algaworks.algafood.api.model.request.ProductPhotoRequest;
 import com.algaworks.algafood.api.model.response.ProductPhotoResponse;
 import com.algaworks.algafood.domain.model.Product;
+import com.algaworks.algafood.domain.model.dto.ProductPhotoData;
 import com.algaworks.algafood.domain.service.ProductPhotoCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +65,11 @@ public class RestaurantProductController {
 	public ProductPhotoResponse createRestaurantProductPhoto(
 			@PathVariable("restaurant_id") Long restaurantId,
 			@PathVariable("product_id") Long productId,
-			@Valid ProductPhotoRequest photoRequest) {
-		return productPhotoCatalogService.createProductPhoto(photoRequest, restaurantId, productId);
+			@Valid ProductPhotoRequest photoRequest) throws IOException {
+		return productPhotoCatalogService.createProductPhoto(ProductPhotoData.builder()
+						.photoRequest(photoRequest)
+						.productId(productId)
+						.restaurantId(restaurantId)
+						.build());
 	}
 }

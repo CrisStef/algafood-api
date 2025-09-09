@@ -1,16 +1,20 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.api.mapper.ProductPhotoMapper;
-import com.algaworks.algafood.api.model.request.ProductPhotoRequest;
 import com.algaworks.algafood.api.model.response.ProductPhotoResponse;
 import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.ProductPhoto;
+import com.algaworks.algafood.domain.model.dto.NewPhoto;
+import com.algaworks.algafood.domain.model.dto.ProductPhotoData;
 import com.algaworks.algafood.domain.repository.ProductRepository;
+import com.algaworks.algafood.domain.util.FileNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 @Service
@@ -21,24 +25,27 @@ public class ProductPhotoCatalogService {
     private ProductRepository productRepository;
     @Autowired
     private ProductPhotoMapper productPhotoMapper;
+    @Autowired
+    private IPhotoStorageService photoStorageService;
 
-    public ProductPhotoResponse createProductPhoto(ProductPhotoRequest photoRequest, Long restaurantId, Long productId) {
-        Product product = productService.getRestaurantProduct(restaurantId, productId);
-        MultipartFile file = photoRequest.getFile();
+    public ProductPhotoResponse createProductPhoto(ProductPhotoData productPhotoData) throws IOException {
+        Product product = productService.getRestaurantProduct(
+                productPhotoData.getRestaurantId(), productPhotoData.getProductId());
+        MultipartFile fileData = productPhotoData.getPhotoRequest().getFile();
 
         ProductPhoto photo = new ProductPhoto();
         photo.setProduct(product);
-        photo.setDescription(photoRequest.getDescription());
-        photo.setContentType(file.getContentType());
-        photo.setFileSize(file.getSize());
-        photo.setFileName(file.getName());
+        photo.setDescription(productPhotoData.getPhotoRequest().getDescription());
+        photo.setContentType(fileData.getContentType());
+        photo.setFileSize(fileData.getSize());
+        photo.setFileName(fileData.getOriginalFilename());
 
         return productPhotoMapper.productPhotoForProductPhotoResponse(
-                this.saveProductPhoto(photo));
+                this.saveProductPhoto(photo, fileData.getInputStream()));
     }
 
     @Transactional
-    public ProductPhoto saveProductPhoto(ProductPhoto productPhoto) {
+    public ProductPhoto saveProductPhoto(ProductPhoto productPhoto, InputStream fileData) {
         Long restaurantId = productPhoto.getRestaurantId();
         Long productId = productPhoto.getProduct().getId();
 
@@ -49,6 +56,19 @@ public class ProductPhotoCatalogService {
             productRepository.delete(existingPhoto.get());
         }
 
-        return productRepository.save(productPhoto);
+        String fileName = photoStorageService.generateFileName(productPhoto.getFileName());
+
+        productPhoto.setFileName(FileNameUtils.removeExtension(fileName));
+        productPhoto = productRepository.save(productPhoto);
+        productRepository.flush();
+
+        NewPhoto newPhoto = NewPhoto.builder()
+                 .fileName(fileName)
+                 .inputStream(fileData)
+                 .build();
+
+        photoStorageService.store(newPhoto);
+
+        return productPhoto;
     }
 }
