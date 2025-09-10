@@ -27,6 +27,17 @@ public class LocalPhotoStorageServiceImpl implements IPhotoStorageService {
         }
     }
 
+    @Override
+    public void remove(String fileName) {
+        try {
+            Path filePath = getFilePath(fileName);
+            Files.deleteIfExists(filePath);
+
+        } catch (Exception e) {
+            throw new StorageException("Não foi possível deletar o arquivo.", e);
+        }
+    }
+
     private Path getFilePath(String fileName) {
         return folderPhotos.resolve(Path.of(fileName));
     }

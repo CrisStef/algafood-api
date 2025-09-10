@@ -20,6 +20,7 @@ public class ProductPhoto {
     private String description;
     private String contentType;
     private Long fileSize;
+    private String fileExtension;
 
     public Long getRestaurantId() {
         if (getProduct() != null) {

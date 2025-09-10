@@ -39,6 +39,7 @@ public class ProductPhotoCatalogService {
         photo.setContentType(fileData.getContentType());
         photo.setFileSize(fileData.getSize());
         photo.setFileName(fileData.getOriginalFilename());
+        photo.setFileExtension(FileNameUtils.getExtension(fileData.getOriginalFilename()));
 
         return productPhotoMapper.productPhotoForProductPhotoResponse(
                 this.saveProductPhoto(photo, fileData.getInputStream()));
@@ -48,11 +49,13 @@ public class ProductPhotoCatalogService {
     public ProductPhoto saveProductPhoto(ProductPhoto productPhoto, InputStream fileData) {
         Long restaurantId = productPhoto.getRestaurantId();
         Long productId = productPhoto.getProduct().getId();
+        String existingFileName = null;
 
         Optional<ProductPhoto> existingPhoto =
                 productRepository.findPhotoById(restaurantId, productId);
 
         if (existingPhoto.isPresent()) {
+            existingFileName = existingPhoto.get().getFileName() + "." + existingPhoto.get().getFileExtension();
             productRepository.delete(existingPhoto.get());
         }
 
@@ -67,7 +70,7 @@ public class ProductPhotoCatalogService {
                  .inputStream(fileData)
                  .build();
 
-        photoStorageService.store(newPhoto);
+        photoStorageService.replace(existingFileName, newPhoto);
 
         return productPhoto;
     }
