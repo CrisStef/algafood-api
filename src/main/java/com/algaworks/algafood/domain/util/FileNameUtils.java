@@ -17,4 +17,11 @@ public class FileNameUtils {
 
         return (dotIndex == -1) ? "" : originalFilename.substring(dotIndex + 1);
     }
+
+    public static String buildFileName(String fileName, String extension) {
+        if (extension == null || extension.isBlank()) {
+            return fileName;
+        }
+        return fileName + "." + extension;
+    }
 }

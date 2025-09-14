@@ -2,6 +2,7 @@ package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.api.mapper.ProductPhotoMapper;
 import com.algaworks.algafood.api.model.response.ProductPhotoResponse;
+import com.algaworks.algafood.domain.exception.ProductPhotoNotFoundException;
 import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.ProductPhoto;
 import com.algaworks.algafood.domain.model.dto.NewPhoto;
@@ -55,7 +56,7 @@ public class ProductPhotoCatalogService {
                 productRepository.findPhotoById(restaurantId, productId);
 
         if (existingPhoto.isPresent()) {
-            existingFileName = existingPhoto.get().getFileName() + "." + existingPhoto.get().getFileExtension();
+            existingFileName = FileNameUtils.buildFileName(existingPhoto.get().getFileName(), existingPhoto.get().getFileExtension());
             productRepository.delete(existingPhoto.get());
         }
 
@@ -73,5 +74,23 @@ public class ProductPhotoCatalogService {
         photoStorageService.replace(existingFileName, newPhoto);
 
         return productPhoto;
+    }
+
+    public ProductPhotoResponse findProductPhoto(Long restaurantId, Long productId) {
+        return productPhotoMapper.productPhotoForProductPhotoResponse(
+                this.getProductPhoto(restaurantId, productId));
+    }
+
+    public ProductPhoto getProductPhoto(Long restaurantId, Long productId) {
+        return productRepository.findPhotoById(restaurantId, productId)
+                .orElseThrow(() -> new ProductPhotoNotFoundException(productId, restaurantId));
+
+    }
+
+    public InputStream getProductPhotoFile(Long restaurantId, Long productId) {
+        ProductPhoto productPhoto = this.getProductPhoto(restaurantId, productId);
+        String fileName = FileNameUtils.buildFileName(productPhoto.getFileName(), productPhoto.getFileExtension());
+
+        return  photoStorageService.recover(fileName);
     }
 }

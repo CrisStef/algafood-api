@@ -2,12 +2,15 @@ package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.model.dto.NewPhoto;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 public interface IPhotoStorageService {
     void store(NewPhoto newPhoto);
 
     void remove(String fileName);
+
+    InputStream recover(String fileName);
 
     default String generateFileName(String fileName) {
         return UUID.randomUUID().toString() + "_" + fileName;

@@ -1,18 +1,22 @@
 package com.algaworks.algafood.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import com.algaworks.algafood.api.model.request.ProductPhotoRequest;
 import com.algaworks.algafood.api.model.response.ProductPhotoResponse;
+import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.dto.ProductPhotoData;
 import com.algaworks.algafood.domain.service.ProductPhotoCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.algaworks.algafood.api.mapper.ProductMapper;
@@ -71,5 +75,27 @@ public class RestaurantProductController {
 						.productId(productId)
 						.restaurantId(restaurantId)
 						.build());
+	}
+
+	@GetMapping(value = "/{product_id}/photo", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ProductPhotoResponse createRestaurantProductPhoto(
+			@PathVariable("restaurant_id") Long restaurantId,
+			@PathVariable("product_id") Long productId) throws IOException {
+		return productPhotoCatalogService.findProductPhoto(restaurantId, productId);
+	}
+
+	@GetMapping(value = "/{product_id}/photo", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<InputStreamResource> createRestaurantProductPhotoFile(
+			@PathVariable("restaurant_id") Long restaurantId,
+			@PathVariable("product_id") Long productId) throws IOException {
+		try {
+			InputStream inputStream = productPhotoCatalogService.getProductPhotoFile(restaurantId, productId);
+
+			return ResponseEntity.ok()
+					.contentType(MediaType.IMAGE_PNG)
+					.body(new InputStreamResource(inputStream));
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
